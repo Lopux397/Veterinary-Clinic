@@ -14,6 +14,7 @@ bool VetClinic::appointmentCheck(std::string_view vetSpeciality, std::string_vie
 void VetClinic::setAnimal(const Animal& animalTemp)
 {
     animal.push_back(animalTemp);
+    std::sort(animal.begin(), animal.end());
 }
 
 void VetClinic::setVet(const Vet& vetTemp)
@@ -70,7 +71,7 @@ void VetClinic::infoAnimal() const
     for (int i = 0; i < animal.size(); i++) 
     {
         std::cout << "========= Animal[" << i + 1 << "] =========" << std::endl;
-        animal[i].info();
+        std::cout << animal[i];
         std::cout << "=============================\n" << std::endl;
     }
 }
@@ -80,7 +81,7 @@ void VetClinic::infoVet() const
     for (int i = 0; i < vet.size(); i++)
     {
         std::cout << "========= Vet[" << i + 1 << "] =========" << std::endl;
-        vet[i].info();
+        std::cout << vet[i];
         std::cout << "==========================\n" << std::endl;
     }
 }
@@ -90,7 +91,37 @@ void VetClinic::infoAppeals() const
     for (int i = 0; i < appeals.size(); i++)
     {
         std::cout << "========= Appeals[" << i + 1 << "] =========" << std::endl;
-        appeals[i].info();
+        std::cout << appeals[i];
         std::cout << "==============================\n" << std::endl;
     }
+}
+
+VetClinic& VetClinic::operator+=(const Animal & ani)
+{
+    setAnimal(ani);
+
+    return *this;
+}
+
+VetClinic& VetClinic::operator+=(const Vet& v)
+{
+    setVet(v);
+
+    return *this;
+}
+
+VetClinic& VetClinic::operator-=(const Animal& ani)
+{
+    auto it = std::find(animal.begin(), animal.end(), ani);
+    if (it == animal.end()) return *this;
+    animal.erase(it);
+    return *this;
+}
+
+VetClinic& VetClinic::operator-=(const Vet& v)
+{
+    auto it = std::find(vet.begin(), vet.end(), v);
+    if (it == vet.end()) return *this;
+    vet.erase(it);
+    return *this;
 }
