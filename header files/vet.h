@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <string_view>
-
+#include <algorithm>
 
 class Vet
 {
@@ -20,6 +20,21 @@ public:
     std::string getName() const;
     std::string getSpeciality() const;
 
-    void info() const;
+    friend std::ostream& operator<< (std::ostream& os, const Vet& v)
+    {
+        os << v.name << std::endl;
+        os << v.speciality << std::endl;
+
+        return os;
+    }
+    friend std::istream& operator>> (std::istream& is, Vet& v)
+    {
+        std::getline(is, v.name);
+        std::getline(is, v.speciality);
+
+        return is;
+    }
+
+    bool operator== (const Vet& v) const;
 };
 

@@ -16,12 +16,3 @@ Animal Appeals::getAnimal() const { return animal; }
 std::string Appeals::getDate() const { return date; }
 std::string Appeals::getDiagnosis() const { return diagnosis; }
 std::string Appeals::getTreatment() const { return treatment; }
-
-void Appeals::info() const
-{
-    std::cout << "Vet: " << vet.getName() << "(" << vet.getSpeciality() << ")" << std::endl;
-    std::cout << "Animal: " << animal.getName() << "(" << animal.getView() << ")" << std::endl;
-    std::cout << "Date: " << date << std::endl;
-    std::cout << "Diagnosis: " << diagnosis << std::endl;
-    std::cout << "Treatment: " << treatment << std::endl;
-}

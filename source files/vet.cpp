@@ -11,7 +11,7 @@ void Vet::setSpeciality(std::string_view specialityTemp) { speciality = speciali
 std::string Vet::getName() const { return name; }
 std::string Vet::getSpeciality() const { return speciality; }
 
-void Vet::info() const
+bool Vet::operator== (const Vet& v) const 
 {
-    std::cout << "Name: " << name << "\nSpeciality: " << speciality << std::endl;
+    return name == v.name;
 }

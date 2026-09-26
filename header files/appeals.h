@@ -31,5 +31,14 @@ public:
     std::string getDiagnosis() const;
     std::string getTreatment() const;
 
-    void info() const;
+    friend std::ostream& operator<< (std::ostream& os, const Appeals& app)
+    {
+        os << app.vet.getSpeciality() << " " << app.vet.getName() << std::endl;
+        os << app.animal.getView() << " " << app.animal.getName() << std::endl;
+        os << app.date << std::endl;
+        os << app.diagnosis << std::endl;
+        os << app.treatment << std::endl;
+
+        return os;
+    }
 };

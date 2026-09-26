@@ -17,7 +17,12 @@ std::string Animal::getBreed() const { return breed; }
 unsigned int Animal::getAge() const { return age; }
 std::string Animal::getOwner() const { return owner; }
 
-void Animal::info() const
+bool Animal::operator== (const Animal& ani) const
 {
-    std::cout << "Name: " << name << "\nView: " << view << "\nBreed: " << breed << "\nAge: " << age << "\nOwner: " << owner << std::endl;
+    return name == ani.name && owner == ani.owner;
+}
+
+std::strong_ordering Animal::operator<=> (const Animal& ani) const
+{
+    return age <=> ani.age;
 }
