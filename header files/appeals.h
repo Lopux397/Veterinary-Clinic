@@ -31,5 +31,5 @@ public:
     std::string getDiagnosis() const;
     std::string getTreatment() const;
 
-    void info() const;
+    friend std::ostream& operator<< (std::ostream& os, const Appeals& app);
 };

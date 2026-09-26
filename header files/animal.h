@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <string_view>
+#include <limits>
+#include <algorithm>
 
 class Animal
 {
@@ -28,5 +30,9 @@ public:
     unsigned int getAge() const;
     std::string getOwner() const;
 
-    void info() const;
+    friend std::ostream& operator<< (std::ostream& os, const Animal& ani);
+    friend std::istream& operator>> (std::istream& is, Animal& ani);
+
+    bool operator== (const Animal& ani) const;
+    bool operator< (const Animal& ani) const;
 };

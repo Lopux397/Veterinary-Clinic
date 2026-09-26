@@ -17,11 +17,13 @@ std::string Appeals::getDate() const { return date; }
 std::string Appeals::getDiagnosis() const { return diagnosis; }
 std::string Appeals::getTreatment() const { return treatment; }
 
-void Appeals::info() const
+std::ostream& operator<< (std::ostream& os, const Appeals& app) 
 {
-    std::cout << "Vet: " << vet.getName() << "(" << vet.getSpeciality() << ")" << std::endl;
-    std::cout << "Animal: " << animal.getName() << "(" << animal.getView() << ")" << std::endl;
-    std::cout << "Date: " << date << std::endl;
-    std::cout << "Diagnosis: " << diagnosis << std::endl;
-    std::cout << "Treatment: " << treatment << std::endl;
+    os << app.vet.getSpeciality() << " " << app.vet.getName() << std::endl;
+    os << app.animal.getView() << " " << app.animal.getName() << std::endl;
+    os << app.date << std::endl;
+    os << app.diagnosis << std::endl;
+    os << app.treatment << std::endl;
+
+    return os;
 }

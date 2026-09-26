@@ -17,7 +17,38 @@ std::string Animal::getBreed() const { return breed; }
 unsigned int Animal::getAge() const { return age; }
 std::string Animal::getOwner() const { return owner; }
 
-void Animal::info() const
+std::ostream& operator<< (std::ostream& os, const Animal& ani)
 {
-    std::cout << "Name: " << name << "\nView: " << view << "\nBreed: " << breed << "\nAge: " << age << "\nOwner: " << owner << std::endl;
+    os << ani.name << std::endl;
+    os << ani.view << std::endl;
+    os << ani.breed << std::endl;
+    os << ani.age << std::endl;
+    os << ani.owner << std::endl;
+
+    return os;
+}
+
+std::istream& operator>> (std::istream& is, Animal& ani) 
+{
+    std::getline(is, ani.name);
+    std::getline(is, ani.view);
+    std::getline(is, ani.breed);
+    is >> ani.age;
+
+    is.clear();
+    is.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
+      
+    std::getline(is, ani.owner);
+
+    return is;
+}
+
+bool Animal::operator== (const Animal& ani) const
+{
+    return name == ani.name && owner == ani.owner;
+}
+
+bool Animal::operator< (const Animal& ani) const 
+{
+    return age < ani.age;
 }

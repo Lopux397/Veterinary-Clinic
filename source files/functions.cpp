@@ -20,6 +20,8 @@ void menu(VetClinic& clinic, bool& end)
     std::cout << "4. Show all doctors" << std::endl;
     std::cout << "5. Show all animals" << std::endl;
     std::cout << "6. Show appointment history" << std::endl;
+    std::cout << "7. Remove veterinarian" << std::endl;
+    std::cout << "8. Remove the animal" << std::endl;
     std::cout << "0. Exit" << std::endl;
     std::cout << "=====================================" << std::endl;
     do
@@ -32,50 +34,28 @@ void menu(VetClinic& clinic, bool& end)
         switch (option) {
         case 1:
         {
-            std::string fullName; 
-            std::string speciality;
+            Vet vet;
 
-            std::cout << "Enter the veterinarian's full name: ";
-            std::getline(std::cin, fullName);
+            std::cout << "Enter vet data (full name / specialization, each on its own line):" << std::endl;
+            std::cin >> vet;
 
-            std::cout << "Enter specialization: "; //(Терапевт / Орнитолог / Ратолог)
-            std::getline(std::cin, speciality);
-
-            clinic.setVet(Vet(fullName, speciality));
+            clinic += vet;
             std::cout << std::endl;
             break;
         }
         case 2:
         {
-            std::string name; 
-            std::string view; 
-            std::string breed; 
-            std::string owner;
-            unsigned int age;
+            Animal animal;
 
-            std::cout << "Enter the animal's name: ";
-            std::getline(std::cin, name);
+            std::cout << "Enter animal data (name / view / breed / age / owner, each on its own line):" << std::endl;
+            std::cin >> animal;
 
-            std::cout << "Enter the view: ";
-            std::getline(std::cin, view);
-
-            std::cout << "Enter the breed: ";
-            std::getline(std::cin, breed);
-
-            std::cout << "Enter age: ";
-            std::cin >> age;
-            clearInput();
-
-            std::cout << "Enter the owner: ";
-            std::getline(std::cin, owner);
-
-            clinic.setAnimal(Animal(name, view, breed, age, owner));
+            clinic += animal;
             std::cout << std::endl;
             break;
         }
         case 3:
         {
-
             std::string vetSpeciality;
             std::string nameAnimal;
             std::string date;
@@ -116,6 +96,34 @@ void menu(VetClinic& clinic, bool& end)
         case 6:
         {
             clinic.infoAppeals();
+            std::cout << std::endl;
+            break;
+        }
+        case 7: 
+        {
+            std::string name;
+
+            std::cout << "Enter the vet's full name to remove: ";
+            std::getline(std::cin, name);
+
+            clinic -= Vet(name, "");
+
+            std::cout << std::endl;
+            break;
+        }
+        case 8:
+        {
+            std::string name;
+            std::string owner;
+
+            std::cout << "Enter the animal's name to remove: ";
+            std::getline(std::cin, name);
+
+            std::cout << "Enter the owner's name: ";
+            std::getline(std::cin, owner);
+
+            clinic -= Animal(name, "", "", 0, owner);
+
             std::cout << std::endl;
             break;
         }

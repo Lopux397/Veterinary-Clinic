@@ -11,7 +11,23 @@ void Vet::setSpeciality(std::string_view specialityTemp) { speciality = speciali
 std::string Vet::getName() const { return name; }
 std::string Vet::getSpeciality() const { return speciality; }
 
-void Vet::info() const
+std::ostream& operator<< (std::ostream& os, const Vet& v) 
 {
-    std::cout << "Name: " << name << "\nSpeciality: " << speciality << std::endl;
+    os << v.name << std::endl;
+    os << v.speciality << std::endl;
+
+    return os;
+}
+
+std::istream& operator>> (std::istream& is, Vet& v) 
+{
+    std::getline(is, v.name);
+    std::getline(is, v.speciality);
+
+    return is;
+}
+
+bool Vet::operator== (const Vet& v) const 
+{
+    return name == v.name;
 }

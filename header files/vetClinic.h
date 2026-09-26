@@ -30,4 +30,10 @@ public:
     void infoAnimal() const;
     void infoVet() const;
     void infoAppeals() const;
+
+    VetClinic& operator+=(const Animal& ani);
+    VetClinic& operator+=(const Vet& v);
+
+    VetClinic& operator-=(const Animal& ani);
+    VetClinic& operator-=(const Vet& v);
 };
