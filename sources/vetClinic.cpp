@@ -113,7 +113,11 @@ VetClinic& VetClinic::operator+=(const Vet& v)
 VetClinic& VetClinic::operator-=(const Animal& ani)
 {
     auto it = std::find(animal.begin(), animal.end(), ani);
-    if (it == animal.end()) return *this;
+    if (it == animal.end())
+    {
+        std::cout << "Animal not found!" << std::endl;
+        return *this;
+    }
     animal.erase(it);
     return *this;
 }
@@ -121,7 +125,11 @@ VetClinic& VetClinic::operator-=(const Animal& ani)
 VetClinic& VetClinic::operator-=(const Vet& v)
 {
     auto it = std::find(vet.begin(), vet.end(), v);
-    if (it == vet.end()) return *this;
+    if (it == vet.end())
+    {
+        std::cout << "Vet not found!" << std::endl;
+        return *this;
+    }
     vet.erase(it);
     return *this;
 }
