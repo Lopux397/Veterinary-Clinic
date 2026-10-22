@@ -2,19 +2,17 @@
 
 VetClinic::VetClinic() = default;
 
-bool VetClinic::appointmentCheck(std::string_view vetSpeciality, std::string_view viewAnimal) const
+bool VetClinic::appointmentCheck(std::string_view vetSpeciality, const Animal& patient) const
 {
-    if (vetSpeciality == "Орнитолог" && viewAnimal != "Птица") return false;
-    if (vetSpeciality == "Ратолог" && viewAnimal != "Грызун") return false;
-    if (vetSpeciality == "Терапевт" && (viewAnimal == "Птица" || viewAnimal == "Грызун")) return false;
-
-    return true;
+    return patient.canBeTreatedBy(vetSpeciality);
 }
 
-void VetClinic::setAnimal(const Animal& animalTemp)
+void VetClinic::setAnimal(std::shared_ptr<Animal> animalTemp)
 {
-    animal.push_back(animalTemp);
-    std::sort(animal.begin(), animal.end());
+    if (!animalTemp) return;
+
+    animal.push_back(std::move(animalTemp));
+    std::sort(animal.begin(), animal.end(), [](const std::shared_ptr<Animal>& a, const std::shared_ptr<Animal>& b) { return *a < *b; });
 }
 
 void VetClinic::setVet(const Vet& vetTemp)
@@ -40,11 +38,11 @@ bool VetClinic::setAppeals(std::string_view vetSpeciality, std::string_view name
         return false;
     }
 
-    const Animal* addsAnimal = nullptr;
+    std::shared_ptr<Animal> addsAnimal;
     for (const auto& currentAnimal : animal) 
     {
-        if (currentAnimal.getName() == nameAnimal) {
-            addsAnimal = &currentAnimal;
+        if (currentAnimal->getName() == nameAnimal) {
+            addsAnimal = currentAnimal;
             break;
         }
     }
@@ -55,13 +53,13 @@ bool VetClinic::setAppeals(std::string_view vetSpeciality, std::string_view name
         return false;
     }
 
-    if (!appointmentCheck(vetSpeciality, addsAnimal->getView())) 
+    if (!appointmentCheck(vetSpeciality, *addsAnimal)) 
     {
-        std::cout << "A "<< vetSpeciality << " cannot treat a" << addsAnimal->getView() << std::endl;
+        std::cout << "A "<< vetSpeciality << " cannot treat a " << addsAnimal->getView() << std::endl;
         return false;
     }
 
-    appeals.emplace_back(*addsDoc, *addsAnimal, date, diagnosis, treatment);
+    appeals.emplace_back(*addsDoc, addsAnimal, date, diagnosis, treatment);
     
     return true;
 }
@@ -71,7 +69,7 @@ void VetClinic::infoAnimal() const
     for (int i = 0; i < animal.size(); i++) 
     {
         std::cout << "========= Animal[" << i + 1 << "] =========" << std::endl;
-        std::cout << animal[i];
+        std::cout << *animal[i];
         std::cout << "=============================\n" << std::endl;
     }
 }
@@ -96,9 +94,9 @@ void VetClinic::infoAppeals() const
     }
 }
 
-VetClinic& VetClinic::operator+=(const Animal & ani)
+VetClinic& VetClinic::operator+=(std::shared_ptr<Animal> ani)
 {
-    setAnimal(ani);
+    setAnimal(std::move(ani));
 
     return *this;
 }
@@ -112,7 +110,7 @@ VetClinic& VetClinic::operator+=(const Vet& v)
 
 VetClinic& VetClinic::operator-=(const Animal& ani)
 {
-    auto it = std::find(animal.begin(), animal.end(), ani);
+    auto it = std::find_if(animal.begin(), animal.end(), [&ani](const std::shared_ptr<Animal>& current) { return *current == ani; });
     if (it == animal.end())
     {
         std::cout << "Animal not found!" << std::endl;

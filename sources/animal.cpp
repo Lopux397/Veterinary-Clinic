@@ -17,6 +17,62 @@ std::string Animal::getBreed() const { return breed; }
 unsigned int Animal::getAge() const { return age; }
 std::string Animal::getOwner() const { return owner; }
 
+bool Animal::readFlag(std::istream& is)
+{
+    std::string line;
+    std::getline(is, line);
+
+    return line == "1" || line == "y" || line == "Y" || line == "yes" || line == "Yes" || line == "да" || line == "Да";
+}
+
+void Animal::skipLine(std::istream& is)
+{
+    is.clear();
+    is.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
+}
+
+std::string Animal::makeSound() const
+{
+    return "Звук не определён";
+}
+
+std::string Animal::careAdvice() const
+{
+    return "Плановый осмотр раз в год.";
+}
+
+bool Animal::canBeTreatedBy(std::string_view vetSpeciality) const
+{
+    return vetSpeciality != "Орнитолог" && vetSpeciality != "Ратолог";
+}
+
+void Animal::print(std::ostream& os) const
+{
+    os << name << std::endl;
+    os << view << std::endl;
+    os << breed << std::endl;
+    os << age << std::endl;
+    os << owner << std::endl;
+}
+
+void Animal::read(std::istream& is)
+{
+    std::getline(is, name);
+
+    // У потомков вид задаётся конструктором, поэтому его не спрашиваем
+    if (view.empty()) std::getline(is, view);
+
+    std::getline(is, breed);
+    readNumber(is, age);
+
+    std::getline(is, owner);
+}
+
+std::string Animal::inputHint() const
+{
+    return view.empty() ? "name / view / breed / age / owner" : "name / breed / age / owner";
+}
+
 bool Animal::operator== (const Animal& ani) const
 {
     return name == ani.name && owner == ani.owner;

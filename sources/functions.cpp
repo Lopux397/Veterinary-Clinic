@@ -1,8 +1,37 @@
 ﻿#include "../headers/animal.h"
+#include "../headers/dog.h"
+#include "../headers/cat.h"
+#include "../headers/bird.h"
+#include "../headers/rodent.h"
 #include "../headers/vet.h"
 #include "../headers/appeals.h"
 #include "../headers/vetClinic.h"
 #include "../headers/functions.h"
+
+#include <iterator>
+
+namespace
+{
+    using Factory = std::shared_ptr<Animal> (*)();
+
+    template <typename T>
+    std::shared_ptr<Animal> create()
+    {
+        return std::make_shared<T>();
+    }
+
+    const Factory factories[] = { create<Dog>, create<Cat>, create<Bird>, create<Rodent>, create<Animal> };
+
+    std::string ask(const char* question)
+    {
+        std::string answer;
+
+        std::cout << question;
+        std::getline(std::cin, answer);
+
+        return answer;
+    }
+}
 
 void clearInput() {
     std::cin.clear();
@@ -13,16 +42,20 @@ void menu(VetClinic& clinic, bool& end)
 {
     int option = -1;
     bool repeat;
+    const char* const items[] = {
+        "1. Add a veterinarian",
+        "2. Add an animal",
+        "3. Schedule an appointment",
+        "4. Show all doctors",
+        "5. Show all animals",
+        "6. Show appointment history",
+        "7. Remove veterinarian",
+        "8. Remove the animal",
+        "0. Exit"
+    };
+
     std::cout << "=============== Menu ================" << std::endl;
-    std::cout << "1. Add a veterinarian" << std::endl;
-    std::cout << "2. Add an animal" << std::endl;
-    std::cout << "3. Schedule an appointment" << std::endl;
-    std::cout << "4. Show all doctors" << std::endl;
-    std::cout << "5. Show all animals" << std::endl;
-    std::cout << "6. Show appointment history" << std::endl;
-    std::cout << "7. Remove veterinarian" << std::endl;
-    std::cout << "8. Remove the animal" << std::endl;
-    std::cout << "0. Exit" << std::endl;
+    for (const char* item : items) std::cout << item << std::endl;
     std::cout << "=====================================" << std::endl;
     do
     {
@@ -45,10 +78,23 @@ void menu(VetClinic& clinic, bool& end)
         }
         case 2:
         {
-            Animal animal;
+            int type = 0;
 
-            std::cout << "Enter animal data (name / view / breed / age / owner, each on its own line):" << std::endl;
-            std::cin >> animal;
+            std::cout << "Animal type: 1. Dog  2. Cat  3. Bird  4. Rodent  5. Other" << std::endl;
+            std::cout << "Select the type: ";
+            std::cin >> type;
+            clearInput();
+
+            if (type < 1 || type > static_cast<int>(std::size(factories)))
+            {
+                std::cout << "Unknown animal type" << std::endl << std::endl;
+                break;
+            }
+
+            std::shared_ptr<Animal> animal = factories[type - 1]();
+
+            std::cout << "Enter animal data (" << animal->inputHint() << ", each on its own line):" << std::endl;
+            std::cin >> *animal;
 
             clinic += animal;
             std::cout << std::endl;
@@ -56,26 +102,11 @@ void menu(VetClinic& clinic, bool& end)
         }
         case 3:
         {
-            std::string vetSpeciality;
-            std::string nameAnimal;
-            std::string date;
-            std::string diagnosis;
-            std::string treatment;
-
-            std::cout << "Enter the vet's specialization: ";
-            std::getline(std::cin, vetSpeciality);
-
-            std::cout << "Enter the animal's name: ";
-            std::getline(std::cin, nameAnimal);
-
-            std::cout << "Enter the date: ";
-            std::getline(std::cin, date);
-
-            std::cout << "Enter the diagnosis: ";
-            std::getline(std::cin, diagnosis);
-
-            std::cout << "Enter the prescribed treatment: ";
-            std::getline(std::cin, treatment);
+            std::string vetSpeciality = ask("Enter the vet's specialization: ");
+            std::string nameAnimal = ask("Enter the animal's name: ");
+            std::string date = ask("Enter the date: ");
+            std::string diagnosis = ask("Enter the diagnosis: ");
+            std::string treatment = ask("Enter the prescribed treatment: ");
 
             clinic.setAppeals(vetSpeciality, nameAnimal, date, diagnosis, treatment);
             std::cout << std::endl;
@@ -101,26 +132,15 @@ void menu(VetClinic& clinic, bool& end)
         }
         case 7: 
         {
-            std::string name;
-
-            std::cout << "Enter the vet's full name to remove: ";
-            std::getline(std::cin, name);
-
-            clinic -= Vet(name, "");
+            clinic -= Vet(ask("Enter the vet's full name to remove: "), "");
 
             std::cout << std::endl;
             break;
         }
         case 8:
         {
-            std::string name;
-            std::string owner;
-
-            std::cout << "Enter the animal's name to remove: ";
-            std::getline(std::cin, name);
-
-            std::cout << "Enter the owner's name: ";
-            std::getline(std::cin, owner);
+            std::string name = ask("Enter the animal's name to remove: ");
+            std::string owner = ask("Enter the owner's name: ");
 
             clinic -= Animal(name, "", "", 0, owner);
 

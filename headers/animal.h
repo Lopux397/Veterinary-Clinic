@@ -13,11 +13,27 @@ private:
     std::string name;
     std::string view;
     std::string breed;
-    unsigned int age;
+    unsigned int age = 0;
     std::string owner;
+protected:
+    static bool readFlag(std::istream& is);
+    static void skipLine(std::istream& is);
+
+    template <typename T>
+    static void readNumber(std::istream& is, T& value)
+    {
+        is >> value;
+        skipLine(is);
+    }
 public:
     Animal();
     Animal(std::string_view nameTemp, std::string_view viewTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp);
+
+    Animal(const Animal&) = default;
+    Animal& operator=(const Animal&) = default;
+    Animal(Animal&&) = default;
+    Animal& operator=(Animal&&) = default;
+    virtual ~Animal() = default;
     
     void setName(std::string_view nameTemp);
     void setView(std::string_view viewTemp);
@@ -31,27 +47,23 @@ public:
     unsigned int getAge() const;
     std::string getOwner() const;
 
+    virtual std::string makeSound() const;
+    virtual std::string careAdvice() const;
+    virtual bool canBeTreatedBy(std::string_view vetSpeciality) const;
+
+    virtual void print(std::ostream& os) const;
+    virtual void read(std::istream& is);
+    virtual std::string inputHint() const;
+
     friend std::ostream& operator<< (std::ostream& os, const Animal& ani)
     {
-        os << ani.name << std::endl;
-        os << ani.view << std::endl;
-        os << ani.breed << std::endl;
-        os << ani.age << std::endl;
-        os << ani.owner << std::endl;
+        ani.print(os);
 
         return os;
     }
     friend std::istream& operator>> (std::istream& is, Animal& ani)
     {
-        std::getline(is, ani.name);
-        std::getline(is, ani.view);
-        std::getline(is, ani.breed);
-        is >> ani.age;
-
-        is.clear();
-        is.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
-
-        std::getline(is, ani.owner);
+        ani.read(is);
 
         return is;
     }
