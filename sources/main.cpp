@@ -52,7 +52,6 @@ int main()
 
     std::cout << "=== Демонстрация иерархии Animal ===" << std::endl;
 
-    Animal reptile("Каа", "Рептилия", "Удав", 4, "Павел");
     Dog dog("Шарик", "Дворняга", 4, "Игорь", false);
     Cat cat("Мурка", "Сиамская", 6, "Ольга", "длинная");
     Bird bird("Гоша", "Ара", 8, "Виктор", 90);
@@ -65,7 +64,7 @@ int main()
               << ", вес грызуна - " << rodent.getWeight() << " г" << std::endl << std::endl;
 
     std::vector<std::shared_ptr<Animal>> pets = {
-        std::make_shared<Animal>(reptile),
+        std::make_shared<Animal>("Каа", "Рептилия", "Удав", 4, "Павел"),
         std::make_shared<Dog>(dog),
         std::make_shared<Cat>(cat),
         std::make_shared<Bird>(bird),

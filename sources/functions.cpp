@@ -8,7 +8,7 @@
 #include "../headers/vetClinic.h"
 #include "../headers/functions.h"
 
-#include <iterator>
+#include <array>
 
 namespace
 {
@@ -20,7 +20,7 @@ namespace
         return std::make_shared<T>();
     }
 
-    const Factory factories[] = { create<Dog>, create<Cat>, create<Bird>, create<Rodent>, create<Animal> };
+    const std::array<Factory, 5> factories = { create<Dog>, create<Cat>, create<Bird>, create<Rodent>, create<Animal> };
 
     std::string ask(const char* question)
     {
@@ -42,7 +42,7 @@ void menu(VetClinic& clinic, bool& end)
 {
     int option = -1;
     bool repeat;
-    const char* const items[] = {
+    const std::array<const char*, 9> items = {
         "1. Add a veterinarian",
         "2. Add an animal",
         "3. Schedule an appointment",
@@ -85,7 +85,7 @@ void menu(VetClinic& clinic, bool& end)
             std::cin >> type;
             clearInput();
 
-            if (type < 1 || type > static_cast<int>(std::size(factories)))
+            if (type < 1 || type > static_cast<int>(factories.size()))
             {
                 std::cout << "Unknown animal type" << std::endl << std::endl;
                 break;
