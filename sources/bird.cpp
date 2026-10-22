@@ -35,7 +35,8 @@ void Bird::print(std::ostream& os) const
 void Bird::read(std::istream& is)
 {
     Animal::read(is);
-    readNumber(is, wingspan);
+    is >> wingspan;
+    skipLine(is);
 }
 
 std::string Bird::inputHint() const

@@ -28,7 +28,8 @@ void Rodent::print(std::ostream& os) const
 void Rodent::read(std::istream& is)
 {
     Animal::read(is);
-    readNumber(is, weight);
+    is >> weight;
+    skipLine(is);
 }
 
 std::string Rodent::inputHint() const

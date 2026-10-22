@@ -18,13 +18,6 @@ private:
 protected:
     static bool readFlag(std::istream& is);
     static void skipLine(std::istream& is);
-
-    template <typename T>
-    static void readNumber(std::istream& is, T& value)
-    {
-        is >> value;
-        skipLine(is);
-    }
 public:
     Animal();
     Animal(std::string_view nameTemp, std::string_view viewTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp);

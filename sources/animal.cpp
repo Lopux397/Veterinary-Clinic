@@ -63,7 +63,8 @@ void Animal::read(std::istream& is)
     if (view.empty()) std::getline(is, view);
 
     std::getline(is, breed);
-    readNumber(is, age);
+    is >> age;
+    skipLine(is);
 
     std::getline(is, owner);
 }
