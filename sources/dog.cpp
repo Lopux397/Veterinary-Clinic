@@ -1,9 +1,9 @@
 ﻿#include "../headers/dog.h"
 
-Dog::Dog() : Animal("", "Собака", "", 0, "") {
+Dog::Dog() : Animal("", "Dog", "", 0, "") {
 }
 Dog::Dog(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, bool vaccinatedTemp)
-    : Animal(nameTemp, "Собака", breedTemp, ageTemp, ownerTemp), vaccinated(vaccinatedTemp) {
+    : Animal(nameTemp, "Dog", breedTemp, ageTemp, ownerTemp), vaccinated(vaccinatedTemp) {
 }
 
 void Dog::setVaccinated(bool vaccinatedTemp) { vaccinated = vaccinatedTemp; }
@@ -11,13 +11,13 @@ bool Dog::isVaccinated() const { return vaccinated; }
 
 std::string Dog::makeSound() const
 {
-    return "Гав!";
+    return "Woof!";
 }
 
 std::string Dog::careAdvice() const
 {
     std::string advice = Animal::careAdvice();
-    if (!vaccinated) advice += " Нужна прививка от бешенства.";
+    if (!vaccinated) advice += " A rabies vaccination is needed.";
 
     return advice;
 }

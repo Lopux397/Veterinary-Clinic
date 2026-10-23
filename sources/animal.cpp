@@ -22,7 +22,7 @@ bool Animal::readFlag(std::istream& is)
     std::string line;
     std::getline(is, line);
 
-    return line == "1" || line == "y" || line == "Y" || line == "yes" || line == "Yes" || line == "да" || line == "Да";
+    return line == "1" || line == "y" || line == "Y" || line == "yes" || line == "Yes";
 }
 
 void Animal::skipLine(std::istream& is)
@@ -33,17 +33,17 @@ void Animal::skipLine(std::istream& is)
 
 std::string Animal::makeSound() const
 {
-    return "Звук не определён";
+    return "Unknown sound";
 }
 
 std::string Animal::careAdvice() const
 {
-    return "Плановый осмотр раз в год.";
+    return "Routine checkup once a year.";
 }
 
 bool Animal::canBeTreatedBy(std::string_view vetSpeciality) const
 {
-    return vetSpeciality != "Орнитолог" && vetSpeciality != "Ратолог";
+    return vetSpeciality != "Ornithologist" && vetSpeciality != "Rodentologist";
 }
 
 void Animal::print(std::ostream& os) const
@@ -59,7 +59,7 @@ void Animal::read(std::istream& is)
 {
     std::getline(is, name);
 
-    // У потомков вид задаётся конструктором, поэтому его не спрашиваем
+    // Derived classes set the view in their constructor, so we do not ask for it
     if (view.empty()) std::getline(is, view);
 
     std::getline(is, breed);

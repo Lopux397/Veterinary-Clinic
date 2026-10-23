@@ -21,50 +21,50 @@ int main()
     bool end = false;
     VetClinic clinic;
     
-    clinic.setVet(Vet("Иванов Иван", "Терапевт"));
-    clinic.setVet(Vet("Петрова Анна", "Орнитолог"));
-    clinic.setVet(Vet("Сидоров Алексей", "Ратолог"));
+    clinic.setVet(Vet("Ivan Ivanov", "Therapist"));
+    clinic.setVet(Vet("Anna Petrova", "Ornithologist"));
+    clinic.setVet(Vet("Alexey Sidorov", "Rodentologist"));
 
-    clinic.setAnimal(std::make_shared<Dog>("Рекс", "Овчарка", 5, "Мария", true));
-    clinic.setAnimal(std::make_shared<Cat>("Барсик", "Британская", 3, "Алексей", "короткая"));
-    clinic.setAnimal(std::make_shared<Bird>("Кеша", "Волнистый попугай", 2, "Елена", 20));
-    clinic.setAnimal(std::make_shared<Rodent>("Хома", "Джунгарский хомяк", 1, "Дмитрий", 35.5));
-    clinic.setAnimal(std::make_shared<Animal>("Каа", "Рептилия", "Удав", 4, "Павел"));
+    clinic.setAnimal(std::make_shared<Dog>("Rex", "German Shepherd", 5, "Maria", true));
+    clinic.setAnimal(std::make_shared<Cat>("Barsik", "British Shorthair", 3, "Alexey", "short"));
+    clinic.setAnimal(std::make_shared<Bird>("Kesha", "Budgerigar", 2, "Elena", 20));
+    clinic.setAnimal(std::make_shared<Rodent>("Homa", "Djungarian hamster", 1, "Dmitry", 35.5));
+    clinic.setAnimal(std::make_shared<Animal>("Kaa", "Reptile", "Boa", 4, "Pavel"));
 
-    clinic.setAppeals("Терапевт", "Рекс", "13.09.2026", "Плановый осмотр", "Курс витаминов");
-    clinic.setAppeals("Терапевт", "Барсик", "14.09.2026", "Вакцинация", "Наблюдение 2 дня");
-    clinic.setAppeals("Орнитолог", "Кеша", "14.09.2026", "Проблемы с оперением", "Кормовая добавка B12");
-    clinic.setAppeals("Ратолог", "Хома", "15.09.2026", "Вывих лапы", "Наложение фиксирующей повязки");
-    clinic.setAppeals("Терапевт", "Каа", "16.09.2026", "Линька", "Повышение влажности в террариуме");
+    clinic.setAppeals("Therapist", "Rex", "13.09.2026", "Routine checkup", "Vitamin course");
+    clinic.setAppeals("Therapist", "Barsik", "14.09.2026", "Vaccination", "Observation for 2 days");
+    clinic.setAppeals("Ornithologist", "Kesha", "14.09.2026", "Feather problems", "Vitamin B12 supplement");
+    clinic.setAppeals("Rodentologist", "Homa", "15.09.2026", "Paw dislocation", "Fixing bandage");
+    clinic.setAppeals("Therapist", "Kaa", "16.09.2026", "Molting", "Increase terrarium humidity");
 
-    Animal animal1("Рекс", "Собака", "Овчарка", 5, "Мария");
-    Animal animal2("Барсик", "Кошка", "Британская", 3, "Алексей");
-    Animal animal3("Рекс", "Собака", "Овчарка", 5, "Мария");
+    Animal animal1("Rex", "Dog", "German Shepherd", 5, "Maria");
+    Animal animal2("Barsik", "Cat", "British Shorthair", 3, "Alexey");
+    Animal animal3("Rex", "Dog", "German Shepherd", 5, "Maria");
 
     std::cout << std::boolalpha;
 
-    std::cout << "Равны ли animal1 и animal2: " << (animal1 == animal2) << std::endl;
-    std::cout << "Равны ли animal1 и animal3: " << (animal1 == animal3) << std::endl;
-    std::cout << "Старше ли animal1, чем animal2: " << (animal1 > animal2) << std::endl;
-    std::cout << "Младше ли animal1, чем animal2: " << (animal1 < animal2) << std::endl;
+    std::cout << "Is animal1 equal to animal2: " << (animal1 == animal2) << std::endl;
+    std::cout << "Is animal1 equal to animal3: " << (animal1 == animal3) << std::endl;
+    std::cout << "Is animal1 older than animal2: " << (animal1 > animal2) << std::endl;
+    std::cout << "Is animal1 younger than animal2: " << (animal1 < animal2) << std::endl;
 
     std::cout << std::noboolalpha << std::endl;
 
-    std::cout << "=== Демонстрация иерархии Animal ===" << std::endl;
+    std::cout << "=== Animal hierarchy demo ===" << std::endl;
 
-    Dog dog("Шарик", "Дворняга", 4, "Игорь", false);
-    Cat cat("Мурка", "Сиамская", 6, "Ольга", "длинная");
-    Bird bird("Гоша", "Ара", 8, "Виктор", 90);
-    Rodent rodent("Пушок", "Сирийский хомяк", 2, "Анна", 120.5);
+    Dog dog("Sharik", "Mongrel", 4, "Igor", false);
+    Cat cat("Murka", "Siamese", 6, "Olga", "long");
+    Bird bird("Gosha", "Macaw", 8, "Viktor", 90);
+    Rodent rodent("Pushok", "Syrian hamster", 2, "Anna", 120.5);
 
-    std::cout << "Унаследованные методы: " << dog.getName() << ", " << dog.getView() << ", владелец " << dog.getOwner() << std::endl;
-    std::cout << "Собственные свойства: привита - " << (dog.isVaccinated() ? "да" : "нет")
-              << ", шерсть кошки - " << cat.getFur()
-              << ", размах крыльев птицы - " << bird.getWingspan() << " см"
-              << ", вес грызуна - " << rodent.getWeight() << " г" << std::endl << std::endl;
+    std::cout << "Inherited methods: " << dog.getName() << ", " << dog.getView() << ", owner " << dog.getOwner() << std::endl;
+    std::cout << "Own properties: dog vaccinated - " << (dog.isVaccinated() ? "yes" : "no")
+              << ", cat fur - " << cat.getFur()
+              << ", bird wingspan - " << bird.getWingspan() << " cm"
+              << ", rodent weight - " << rodent.getWeight() << " g" << std::endl << std::endl;
 
     std::vector<std::shared_ptr<Animal>> pets = {
-        std::make_shared<Animal>("Каа", "Рептилия", "Удав", 4, "Павел"),
+        std::make_shared<Animal>("Kaa", "Reptile", "Boa", 4, "Pavel"),
         std::make_shared<Dog>(dog),
         std::make_shared<Cat>(cat),
         std::make_shared<Bird>(bird),
@@ -74,11 +74,11 @@ int main()
     for (const auto& pet : pets)
     {
         std::cout << pet->getView() << " " << pet->getName() << ": " << pet->makeSound() << std::endl;
-        std::cout << "  Рекомендации: " << pet->careAdvice() << std::endl;
-        std::cout << "  Примет терапевт: " << (pet->canBeTreatedBy("Терапевт") ? "да" : "нет") << std::endl;
+        std::cout << "  Care advice: " << pet->careAdvice() << std::endl;
+        std::cout << "  Can a therapist treat it: " << (pet->canBeTreatedBy("Therapist") ? "yes" : "no") << std::endl;
     }
 
-    std::cout << std::endl << "Вывод через оператор << (вызывается переопределённый print):" << std::endl;
+    std::cout << std::endl << "Output via operator<< (the overridden print is called):" << std::endl;
     std::cout << dog << std::endl;
     std::cout << rodent << std::endl;
 

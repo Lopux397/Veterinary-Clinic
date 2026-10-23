@@ -1,9 +1,9 @@
 ﻿#include "../headers/cat.h"
 
-Cat::Cat() : Animal("", "Кошка", "", 0, "") {
+Cat::Cat() : Animal("", "Cat", "", 0, "") {
 }
 Cat::Cat(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, std::string_view furTemp)
-    : Animal(nameTemp, "Кошка", breedTemp, ageTemp, ownerTemp), fur(furTemp) {
+    : Animal(nameTemp, "Cat", breedTemp, ageTemp, ownerTemp), fur(furTemp) {
 }
 
 void Cat::setFur(std::string_view furTemp) { fur = furTemp; }
@@ -11,12 +11,12 @@ std::string Cat::getFur() const { return fur; }
 
 std::string Cat::makeSound() const
 {
-    return "Мяу!";
+    return "Meow!";
 }
 
 std::string Cat::careAdvice() const
 {
-    if (fur == "длинная") return Animal::careAdvice() + " Расчёсывать шерсть раз в неделю.";
+    if (fur == "long") return Animal::careAdvice() + " Long fur should be brushed once a week.";
 
     return Animal::careAdvice();
 }
@@ -35,5 +35,5 @@ void Cat::read(std::istream& is)
 
 std::string Cat::inputHint() const
 {
-    return Animal::inputHint() + " / fur length (короткая/длинная)";
+    return Animal::inputHint() + " / fur length (short/long)";
 }

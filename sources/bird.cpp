@@ -1,9 +1,9 @@
 ﻿#include "../headers/bird.h"
 
-Bird::Bird() : Animal("", "Птица", "", 0, "") {
+Bird::Bird() : Animal("", "Bird", "", 0, "") {
 }
 Bird::Bird(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int wingspanTemp)
-    : Animal(nameTemp, "Птица", breedTemp, ageTemp, ownerTemp), wingspan(wingspanTemp) {
+    : Animal(nameTemp, "Bird", breedTemp, ageTemp, ownerTemp), wingspan(wingspanTemp) {
 }
 
 void Bird::setWingspan(unsigned int wingspanTemp) { wingspan = wingspanTemp; }
@@ -11,19 +11,19 @@ unsigned int Bird::getWingspan() const { return wingspan; }
 
 std::string Bird::makeSound() const
 {
-    return "Чирик!";
+    return "Tweet!";
 }
 
 std::string Bird::careAdvice() const
 {
-    if (wingspan > 50) return Animal::careAdvice() + " Крупной птице нужен просторный вольер.";
+    if (wingspan > 50) return Animal::careAdvice() + " A large bird needs a spacious aviary.";
 
     return Animal::careAdvice();
 }
 
 bool Bird::canBeTreatedBy(std::string_view vetSpeciality) const
 {
-    return vetSpeciality != "Терапевт" && vetSpeciality != "Ратолог";
+    return vetSpeciality != "Therapist" && vetSpeciality != "Rodentologist";
 }
 
 void Bird::print(std::ostream& os) const
