@@ -9,6 +9,17 @@ Cat::Cat(std::string_view nameTemp, std::string_view breedTemp, unsigned int age
 void Cat::setFur(std::string_view furTemp) { fur = furTemp; }
 std::string Cat::getFur() const { return fur; }
 
+// Simplified model: 15 human years for the 1st year, 24 for the 2nd, +4 for every next year
+unsigned int Cat::humanAge() const
+{
+    unsigned int years = getAge();
+
+    if (years == 0) return 0;
+    if (years == 1) return 15;
+
+    return 24 + (years - 2) * 4;
+}
+
 std::string Cat::makeSound() const
 {
     return "Meow!";

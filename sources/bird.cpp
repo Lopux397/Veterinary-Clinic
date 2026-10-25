@@ -9,6 +9,12 @@ Bird::Bird(std::string_view nameTemp, std::string_view breedTemp, unsigned int a
 void Bird::setWingspan(unsigned int wingspanTemp) { wingspan = wingspanTemp; }
 unsigned int Bird::getWingspan() const { return wingspan; }
 
+// The cage should be at least two wingspans wide so the bird can open its wings
+unsigned int Bird::minCageWidth() const
+{
+    return wingspan * 2;
+}
+
 std::string Bird::makeSound() const
 {
     return "Tweet!";

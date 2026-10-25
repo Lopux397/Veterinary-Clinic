@@ -9,6 +9,12 @@ Rodent::Rodent(std::string_view nameTemp, std::string_view breedTemp, unsigned i
 void Rodent::setWeight(double weightTemp) { weight = weightTemp; }
 double Rodent::getWeight() const { return weight; }
 
+// Dose in mg for the given dosage in mg per kg of body weight (weight is stored in grams)
+double Rodent::dailyDose(double mgPerKg) const
+{
+    return weight / 1000.0 * mgPerKg;
+}
+
 std::string Rodent::makeSound() const
 {
     return "Squeak!";

@@ -13,6 +13,8 @@ public:
     void setVaccinated(bool vaccinatedTemp);
     bool isVaccinated() const;
 
+    unsigned int humanAge() const;
+
     std::string makeSound() const override;
     std::string careAdvice() const override;
 

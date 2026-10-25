@@ -13,6 +13,8 @@ public:
     void setWingspan(unsigned int wingspanTemp);
     unsigned int getWingspan() const;
 
+    unsigned int minCageWidth() const;
+
     std::string makeSound() const override;
     std::string careAdvice() const override;
     bool canBeTreatedBy(std::string_view vetSpeciality) const override;

@@ -63,6 +63,12 @@ int main()
               << ", bird wingspan - " << bird.getWingspan() << " cm"
               << ", rodent weight - " << rodent.getWeight() << " g" << std::endl << std::endl;
 
+    std::cout << "Specific methods of derived classes (simplified models):" << std::endl;
+    std::cout << "  Dog " << dog.getName() << " is " << dog.getAge() << " years old, human age - " << dog.humanAge() << std::endl;
+    std::cout << "  Cat " << cat.getName() << " is " << cat.getAge() << " years old, human age - " << cat.humanAge() << std::endl;
+    std::cout << "  Bird " << bird.getName() << " needs a cage at least " << bird.minCageWidth() << " cm wide" << std::endl;
+    std::cout << "  Rodent " << rodent.getName() << " weighs " << rodent.getWeight() << " g, dose at 50 mg/kg - " << rodent.dailyDose(50) << " mg" << std::endl << std::endl;
+
     std::vector<std::shared_ptr<Animal>> pets = {
         std::make_shared<Animal>("Kaa", "Reptile", "Boa", 4, "Pavel"),
         std::make_shared<Dog>(dog),

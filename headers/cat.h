@@ -13,6 +13,8 @@ public:
     void setFur(std::string_view furTemp);
     std::string getFur() const;
 
+    unsigned int humanAge() const;
+
     std::string makeSound() const override;
     std::string careAdvice() const override;
 

@@ -13,6 +13,8 @@ public:
     void setWeight(double weightTemp);
     double getWeight() const;
 
+    double dailyDose(double mgPerKg) const;
+
     std::string makeSound() const override;
     std::string careAdvice() const override;
     bool canBeTreatedBy(std::string_view vetSpeciality) const override;
