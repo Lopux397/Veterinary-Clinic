@@ -10,6 +10,7 @@
 class Animal
 {
 private:
+
     std::string name;
     std::string view;
     std::string breed;
