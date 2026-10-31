@@ -36,6 +36,7 @@
 
 # Executables
 *.sln
+*.slnx
 *.exe
 *.out
 *.app
