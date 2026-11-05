@@ -2,22 +2,16 @@
 
 Cat::Cat() : Animal("", "Cat", "", 0, "") {
 }
-Cat::Cat(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, std::string_view furTemp)
-    : Animal(nameTemp, "Cat", breedTemp, ageTemp, ownerTemp), fur(furTemp) {
+Cat::Cat(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int outdoorHoursTemp)
+    : Animal(nameTemp, "Cat", breedTemp, ageTemp, ownerTemp), outdoorHours(outdoorHoursTemp) {
 }
 
-void Cat::setFur(std::string_view furTemp) { fur = furTemp; }
-std::string Cat::getFur() const { return fur; }
+void Cat::setOutdoorHours(unsigned int outdoorHoursTemp) { outdoorHours = outdoorHoursTemp; }
+unsigned int Cat::getOutdoorHours() const { return outdoorHours; }
 
-// Simplified model: 15 human years for the 1st year, 24 for the 2nd, +4 for every next year
-unsigned int Cat::humanAge() const
+unsigned int Cat::parasiteTreatmentsPerYear() const 
 {
-    unsigned int years = getAge();
-
-    if (years == 0) return 0;
-    if (years == 1) return 15;
-
-    return 24 + (years - 2) * 4;
+    return(unsigned int)(2 + (outdoorHours / 2));
 }
 
 std::string Cat::makeSound() const
@@ -27,24 +21,23 @@ std::string Cat::makeSound() const
 
 std::string Cat::careAdvice() const
 {
-    if (fur == "long") return Animal::careAdvice() + " Long fur should be brushed once a week.";
-
-    return Animal::careAdvice();
+    return Animal::careAdvice() + " Keep track of the number of parasite treatments per year.";
 }
 
 void Cat::print(std::ostream& os) const
 {
     Animal::print(os);
-    os << "Fur: " << fur << std::endl;
+    os << "OutdoorHours: " << outdoorHours << std::endl;
 }
 
 void Cat::read(std::istream& is)
 {
     Animal::read(is);
-    std::getline(is, fur);
+    is >> outdoorHours;
+    skipLine(is);
 }
 
 std::string Cat::inputHint() const
 {
-    return Animal::inputHint() + " / fur length (short/long)";
+    return Animal::inputHint() + " / Number of hours spent away from home";
 }

@@ -2,17 +2,18 @@
 
 Rodent::Rodent() : Animal("", "Rodent", "", 0, "") {
 }
-Rodent::Rodent(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, double weightTemp)
-    : Animal(nameTemp, "Rodent", breedTemp, ageTemp, ownerTemp), weight(weightTemp) {
+Rodent::Rodent(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, double incisorLengthTemp)
+    : Animal(nameTemp, "Rodent", breedTemp, ageTemp, ownerTemp), incisorLength(incisorLengthTemp) {
 }
 
-void Rodent::setWeight(double weightTemp) { weight = weightTemp; }
-double Rodent::getWeight() const { return weight; }
+void Rodent::setIncisorLength(double incisorLengthTemp) { incisorLength = incisorLengthTemp; }
+double Rodent::getIncisorLength() const { return incisorLength; }
 
-// Dose in mg for the given dosage in mg per kg of body weight (weight is stored in grams)
-double Rodent::dailyDose(double mgPerKg) const
+unsigned int Rodent::daysUntilDentalTrim() const
 {
-    return weight / 1000.0 * mgPerKg;
+    if (incisorLength > 35) return 0;
+
+    return (unsigned int)((35 - incisorLength) / 0.275);
 }
 
 std::string Rodent::makeSound() const
@@ -22,25 +23,25 @@ std::string Rodent::makeSound() const
 
 std::string Rodent::careAdvice() const
 {
-    return Animal::careAdvice() + " Weigh at every checkup and monitor the teeth.";
+    return Animal::careAdvice() + " Monitor the condition and length of the teeth.";
 }
 
 void Rodent::print(std::ostream& os) const
 {
     Animal::print(os);
-    os << "Weight (g): " << weight << std::endl;
+    os << "IncisorLength (mm): " << incisorLength << std::endl;
 }
 
 void Rodent::read(std::istream& is)
 {
     Animal::read(is);
-    is >> weight;
+    is >> incisorLength;
     skipLine(is);
 }
 
 std::string Rodent::inputHint() const
 {
-    return Animal::inputHint() + " / weight in grams";
+    return Animal::inputHint() + " / Incisor Length in mm";
 }
 
 bool Rodent::canBeTreatedBy(std::string_view vetSpeciality) const

@@ -17,13 +17,13 @@ std::string Animal::getBreed() const { return breed; }
 unsigned int Animal::getAge() const { return age; }
 std::string Animal::getOwner() const { return owner; }
 
-bool Animal::readFlag(std::istream& is)
-{
-    std::string line;
-    std::getline(is, line);
-
-    return line == "1" || line == "y" || line == "Y" || line == "yes" || line == "Yes";
-}
+//bool Animal::readFlag(std::istream& is)
+//{
+//    std::string line;
+//    std::getline(is, line);
+//
+//    return line == "1" || line == "y" || line == "Y" || line == "yes" || line == "Yes";
+//}
 
 void Animal::skipLine(std::istream& is)
 {
@@ -58,8 +58,7 @@ void Animal::print(std::ostream& os) const
 void Animal::read(std::istream& is)
 {
     std::getline(is, name);
-
-    // Derived classes set the view in their constructor, so we do not ask for it
+    
     if (view.empty()) std::getline(is, view);
 
     std::getline(is, breed);

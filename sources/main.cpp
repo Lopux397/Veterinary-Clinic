@@ -8,8 +8,8 @@
 #include "../headers/vetClinic.h"
 #include "../headers/functions.h"
 
+#include <iostream>
 #include <memory>
-#include <vector>
 
 #include <Windows.h>
 
@@ -18,76 +18,48 @@ int main()
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
 
-    bool end = false;
     VetClinic clinic;
-    
+    bool end = false;
+
     clinic.setVet(Vet("Ivan Ivanov", "Therapist"));
     clinic.setVet(Vet("Anna Petrova", "Ornithologist"));
     clinic.setVet(Vet("Alexey Sidorov", "Rodentologist"));
 
-    clinic.setAnimal(std::make_shared<Dog>("Rex", "German Shepherd", 5, "Maria", true));
-    clinic.setAnimal(std::make_shared<Cat>("Barsik", "British Shorthair", 3, "Alexey", "short"));
+    clinic.setAnimal(std::make_shared<Dog>("Rex", "German Shepherd", 5, "Maria", 2));
+    clinic.setAnimal(std::make_shared<Cat>("Barsik", "British Shorthair", 3, "Alexey", 4));
     clinic.setAnimal(std::make_shared<Bird>("Kesha", "Budgerigar", 2, "Elena", 20));
-    clinic.setAnimal(std::make_shared<Rodent>("Homa", "Djungarian hamster", 1, "Dmitry", 35.5));
+    clinic.setAnimal(std::make_shared<Rodent>("Homa", "Djungarian hamster", 1, "Dmitry", 15.5));
     clinic.setAnimal(std::make_shared<Animal>("Kaa", "Reptile", "Boa", 4, "Pavel"));
 
     clinic.setAppeals("Therapist", "Rex", "13.09.2026", "Routine checkup", "Vitamin course");
-    clinic.setAppeals("Therapist", "Barsik", "14.09.2026", "Vaccination", "Observation for 2 days");
-    clinic.setAppeals("Ornithologist", "Kesha", "14.09.2026", "Feather problems", "Vitamin B12 supplement");
+    clinic.setAppeals("Ornithologist", "Kesha", "14.09.2026", "Feather problems", "Vitamin B12");
     clinic.setAppeals("Rodentologist", "Homa", "15.09.2026", "Paw dislocation", "Fixing bandage");
-    clinic.setAppeals("Therapist", "Kaa", "16.09.2026", "Molting", "Increase terrarium humidity");
 
-    Animal animal1("Rex", "Dog", "German Shepherd", 5, "Maria");
-    Animal animal2("Barsik", "Cat", "British Shorthair", 3, "Alexey");
-    Animal animal3("Rex", "Dog", "German Shepherd", 5, "Maria");
+    Animal a1("Rex", "Dog", "German Shepherd", 5, "Maria");
+    Animal a2("Barsik", "Cat", "British Shorthair", 3, "Alexey");
 
-    std::cout << std::boolalpha;
+    std::cout << std::boolalpha
+              << "a1 == a2: " << (a1 == a2) << "\n"
+              << "a1 > a2: " << (a1 > a2) << "\n\n"
+              << std::noboolalpha;
 
-    std::cout << "Is animal1 equal to animal2: " << (animal1 == animal2) << std::endl;
-    std::cout << "Is animal1 equal to animal3: " << (animal1 == animal3) << std::endl;
-    std::cout << "Is animal1 older than animal2: " << (animal1 > animal2) << std::endl;
-    std::cout << "Is animal1 younger than animal2: " << (animal1 < animal2) << std::endl;
-
-    std::cout << std::noboolalpha << std::endl;
-
-    std::cout << "=== Animal hierarchy demo ===" << std::endl;
-
-    Dog dog("Sharik", "Mongrel", 4, "Igor", false);
-    Cat cat("Murka", "Siamese", 6, "Olga", "long");
+    Dog dog("Sharik", "Mongrel", 4, "Igor", 3);
     Bird bird("Gosha", "Macaw", 8, "Viktor", 90);
-    Rodent rodent("Pushok", "Syrian hamster", 2, "Anna", 120.5);
 
-    std::cout << "Inherited methods: " << dog.getName() << ", " << dog.getView() << ", owner " << dog.getOwner() << std::endl;
-    std::cout << "Own properties: dog vaccinated - " << (dog.isVaccinated() ? "yes" : "no")
-              << ", cat fur - " << cat.getFur()
-              << ", bird wingspan - " << bird.getWingspan() << " cm"
-              << ", rodent weight - " << rodent.getWeight() << " g" << std::endl << std::endl;
+    std::cout << dog.getName() << " walks " << dog.weeklyWalkHours() << " h/week\n"
+              << bird.getName() << " needs a cage " << bird.minCageWidth() << " cm wide\n\n";
 
-    std::cout << "Specific methods of derived classes (simplified models):" << std::endl;
-    std::cout << "  Dog " << dog.getName() << " is " << dog.getAge() << " years old, human age - " << dog.humanAge() << std::endl;
-    std::cout << "  Cat " << cat.getName() << " is " << cat.getAge() << " years old, human age - " << cat.humanAge() << std::endl;
-    std::cout << "  Bird " << bird.getName() << " needs a cage at least " << bird.minCageWidth() << " cm wide" << std::endl;
-    std::cout << "  Rodent " << rodent.getName() << " weighs " << rodent.getWeight() << " g, dose at 50 mg/kg - " << rodent.dailyDose(50) << " mg" << std::endl << std::endl;
-
-    std::vector<std::shared_ptr<Animal>> pets = {
-        std::make_shared<Animal>("Kaa", "Reptile", "Boa", 4, "Pavel"),
+    std::shared_ptr<Animal> pets[] = {
         std::make_shared<Dog>(dog),
-        std::make_shared<Cat>(cat),
         std::make_shared<Bird>(bird),
-        std::make_shared<Rodent>(rodent)
+        std::make_shared<Animal>("Kaa", "Reptile", "Boa", 4, "Pavel")
     };
 
     for (const auto& pet : pets)
-    {
-        std::cout << pet->getView() << " " << pet->getName() << ": " << pet->makeSound() << std::endl;
-        std::cout << "  Care advice: " << pet->careAdvice() << std::endl;
-        std::cout << "  Can a therapist treat it: " << (pet->canBeTreatedBy("Therapist") ? "yes" : "no") << std::endl;
-    }
+        std::cout << pet->getView() << " " << pet->getName() << ": " << pet->makeSound() << "\n";
 
-    std::cout << std::endl << "Output via operator<< (the overridden print is called):" << std::endl;
-    std::cout << dog << std::endl;
-    std::cout << rodent << std::endl;
+    std::cout << "\n" << dog << "\n";
 
-    while(!end) menu(clinic, end);       
+    while (!end) menu(clinic, end);
     return 0;
 }

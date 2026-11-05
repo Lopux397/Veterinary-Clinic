@@ -5,15 +5,15 @@
 class Rodent : public Animal
 {
 private:
-    double weight = 0.0;
+    double incisorLength = 0.0; //Длина резца
 public:
     Rodent();
-    Rodent(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, double weightTemp);
+    Rodent(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, double incisorLengthTemp);
 
-    void setWeight(double weightTemp);
-    double getWeight() const;
+    void setIncisorLength(double incisorLengthTemp);
+    double getIncisorLength() const;
 
-    double dailyDose(double mgPerKg) const;
+    unsigned int daysUntilDentalTrim() const;
 
     std::string makeSound() const override;
     std::string careAdvice() const override;

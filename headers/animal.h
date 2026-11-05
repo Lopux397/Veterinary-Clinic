@@ -17,7 +17,7 @@ private:
     unsigned int age = 0;
     std::string owner;
 protected:
-    static bool readFlag(std::istream& is);
+    //static bool readFlag(std::istream& is);
     static void skipLine(std::istream& is);
 public:
     Animal();

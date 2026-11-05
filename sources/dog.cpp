@@ -2,22 +2,16 @@
 
 Dog::Dog() : Animal("", "Dog", "", 0, "") {
 }
-Dog::Dog(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, bool vaccinatedTemp)
-    : Animal(nameTemp, "Dog", breedTemp, ageTemp, ownerTemp), vaccinated(vaccinatedTemp) {
+Dog::Dog(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int walksPerDayTemp)
+    : Animal(nameTemp, "Dog", breedTemp, ageTemp, ownerTemp), walksPerDay(walksPerDayTemp) {
 }
 
-void Dog::setVaccinated(bool vaccinatedTemp) { vaccinated = vaccinatedTemp; }
-bool Dog::isVaccinated() const { return vaccinated; }
+void Dog::setWalksPerDay(unsigned int walksPerDayTemp) { walksPerDay = walksPerDayTemp; }
+unsigned int Dog::getWalksPerDay() const { return walksPerDay; }
 
-// Simplified model: 15 human years for the 1st year, 24 for the 2nd, +5 for every next year
-unsigned int Dog::humanAge() const
+unsigned int Dog::weeklyWalkHours() const 
 {
-    unsigned int years = getAge();
-
-    if (years == 0) return 0;
-    if (years == 1) return 15;
-
-    return 24 + (years - 2) * 5;
+    return (unsigned int)((walksPerDay * 30 * 7) / 60);
 }
 
 std::string Dog::makeSound() const
@@ -27,25 +21,23 @@ std::string Dog::makeSound() const
 
 std::string Dog::careAdvice() const
 {
-    std::string advice = Animal::careAdvice();
-    if (!vaccinated) advice += " A rabies vaccination is needed.";
-
-    return advice;
+    return Animal::careAdvice() + " Need to take out for a walk.";
 }
 
 void Dog::print(std::ostream& os) const
 {
     Animal::print(os);
-    os << "Rabies vaccinated: " << (vaccinated ? "yes" : "no") << std::endl;
+    os << "Number of walks per day: " << walksPerDay << std::endl;
 }
 
 void Dog::read(std::istream& is)
 {
     Animal::read(is);
-    vaccinated = readFlag(is);
+    is >> walksPerDay;
+    skipLine(is);
 }
 
 std::string Dog::inputHint() const
 {
-    return Animal::inputHint() + " / rabies vaccinated (yes/no)";
+    return Animal::inputHint() + " / number of walks per day";
 }

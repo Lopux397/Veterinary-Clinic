@@ -5,15 +5,15 @@
 class Dog : public Animal
 {
 private:
-    bool vaccinated = false;
+    unsigned int walksPerDay = 0; //количество прогулок в день
 public:
     Dog();
-    Dog(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, bool vaccinatedTemp);
+    Dog(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int walksPerDayTemp);
 
-    void setVaccinated(bool vaccinatedTemp);
-    bool isVaccinated() const;
+    void setWalksPerDay(unsigned int walksPerDayTemp);
+    unsigned int getWalksPerDay() const;
 
-    unsigned int humanAge() const;
+    unsigned int weeklyWalkHours() const;
 
     std::string makeSound() const override;
     std::string careAdvice() const override;

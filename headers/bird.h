@@ -5,7 +5,7 @@
 class Bird : public Animal
 {
 private:
-    unsigned int wingspan = 0;
+    unsigned int wingspan = 0; //размах крыльев
 public:
     Bird();
     Bird(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int wingspanTemp);
