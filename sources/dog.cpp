@@ -11,7 +11,7 @@ unsigned int Dog::getWalksPerDay() const { return walksPerDay; }
 
 unsigned int Dog::weeklyWalkHours() const 
 {
-    return (unsigned int)((walksPerDay * 30 * 7) / 60);
+    return ((walksPerDay * 30 * 7) / 60);
 }
 
 std::string Dog::makeSound() const

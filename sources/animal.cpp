@@ -17,14 +17,6 @@ std::string Animal::getBreed() const { return breed; }
 unsigned int Animal::getAge() const { return age; }
 std::string Animal::getOwner() const { return owner; }
 
-//bool Animal::readFlag(std::istream& is)
-//{
-//    std::string line;
-//    std::getline(is, line);
-//
-//    return line == "1" || line == "y" || line == "Y" || line == "yes" || line == "Yes";
-//}
-
 void Animal::skipLine(std::istream& is)
 {
     is.clear();

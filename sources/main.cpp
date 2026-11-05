@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <memory>
+#include <vector>
 
 #include <Windows.h>
 
@@ -49,7 +50,7 @@ int main()
     std::cout << dog.getName() << " walks " << dog.weeklyWalkHours() << " h/week\n"
               << bird.getName() << " needs a cage " << bird.minCageWidth() << " cm wide\n\n";
 
-    std::shared_ptr<Animal> pets[] = {
+    std::vector<std::shared_ptr<Animal>> pets = {
         std::make_shared<Dog>(dog),
         std::make_shared<Bird>(bird),
         std::make_shared<Animal>("Kaa", "Reptile", "Boa", 4, "Pavel")

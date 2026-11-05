@@ -11,7 +11,7 @@ unsigned int Cat::getOutdoorHours() const { return outdoorHours; }
 
 unsigned int Cat::parasiteTreatmentsPerYear() const 
 {
-    return(unsigned int)(2 + (outdoorHours / 2));
+    return (2 + (outdoorHours / 2));
 }
 
 std::string Cat::makeSound() const
