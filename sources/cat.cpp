@@ -14,6 +14,11 @@ unsigned int Cat::groomingsPerWeek() const
     return std::min((unsigned int)7, 1 + hairballsPerMonth / 2);
 }
 
+double Cat::checkupPrice() const 
+{
+    return 67 + groomingsPerWeek() * 4;
+}
+
 std::string Cat::makeSound() const
 {
     return "Meow!";

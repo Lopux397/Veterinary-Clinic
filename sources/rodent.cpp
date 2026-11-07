@@ -16,6 +16,11 @@ unsigned int Rodent::daysUntilDentalTrim() const
     return (unsigned int)((35 - incisorLength) / 0.275);
 }
 
+double Rodent::checkupPrice() const 
+{
+    return 67 + (daysUntilDentalTrim() == 0) ? 20 : 0;
+}
+
 std::string Rodent::makeSound() const
 {
     return "Squeak!";

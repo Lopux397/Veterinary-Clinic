@@ -15,6 +15,8 @@ public:
 
     unsigned int minCageWidth() const;
 
+    double checkupPrice() const override;
+
     std::string makeSound() const override;
     std::string careAdvice() const override;
     bool canBeTreatedBy(std::string_view vetSpeciality) const override;

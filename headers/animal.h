@@ -40,6 +40,8 @@ public:
     unsigned int getAge() const;
     std::string getOwner() const;
 
+    virtual double checkupPrice() const = 0;
+
     virtual std::string makeSound() const;
     virtual std::string careAdvice() const;
     virtual bool canBeTreatedBy(std::string_view vetSpeciality) const;

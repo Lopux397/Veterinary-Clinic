@@ -19,6 +19,11 @@ std::string Bird::makeSound() const
     return "Tweet!";
 }
 
+double Bird::checkupPrice() const 
+{
+    return 67 + wingspan * 0.5 + (getWingspan() > 50) ? 25 : 0;
+}
+
 std::string Bird::careAdvice() const
 {
     if (wingspan > 50) return Animal::careAdvice() + " A large bird needs a spacious aviary.";

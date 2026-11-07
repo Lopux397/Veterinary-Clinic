@@ -53,7 +53,7 @@ void menu(VetClinic& clinic, bool& end)
             int type = 0;
             std::shared_ptr<Animal> animal;
 
-            std::cout << "Animal type: 1. Dog  2. Cat  3. Bird  4. Rodent  5. Other" << std::endl;
+            std::cout << "Animal type: 1. Dog  2. Cat  3. Bird  4. Rodent" << std::endl;
             std::cout << "Select the type: ";
             std::cin >> type;
             clearInput();
@@ -62,7 +62,6 @@ void menu(VetClinic& clinic, bool& end)
             else if (type == 2) animal = std::make_shared<Cat>();
             else if (type == 3) animal = std::make_shared<Bird>();
             else if (type == 4) animal = std::make_shared<Rodent>();
-            else if (type == 5) animal = std::make_shared<Animal>();
             else
             {
                 std::cout << "Unknown animal type" << std::endl << std::endl;
@@ -144,7 +143,7 @@ void menu(VetClinic& clinic, bool& end)
             std::cout << "Enter the owner's name: ";
             std::getline(std::cin, owner);
 
-            clinic -= Animal(name, "", "", 0, owner);
+            clinic.removeAnimal(name, owner);
 
             std::cout << std::endl;
             break;

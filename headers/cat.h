@@ -16,6 +16,8 @@ public:
     
     unsigned int groomingsPerWeek() const;
 
+    double checkupPrice() const override;
+
     std::string makeSound() const override;
     std::string careAdvice() const override;
 

@@ -30,19 +30,11 @@ int main()
     clinic.setAnimal(std::make_shared<Cat>("Barsik", "British Shorthair", 3, "Alexey", 4));
     clinic.setAnimal(std::make_shared<Bird>("Kesha", "Budgerigar", 2, "Elena", 20));
     clinic.setAnimal(std::make_shared<Rodent>("Homa", "Djungarian hamster", 1, "Dmitry", 15.5));
-    clinic.setAnimal(std::make_shared<Animal>("Kaa", "Reptile", "Boa", 4, "Pavel"));
 
     clinic.setAppeals("Therapist", "Rex", "13.09.2026", "Routine checkup", "Vitamin course");
     clinic.setAppeals("Ornithologist", "Kesha", "14.09.2026", "Feather problems", "Vitamin B12");
     clinic.setAppeals("Rodentologist", "Homa", "15.09.2026", "Paw dislocation", "Fixing bandage");
 
-    Animal a1("Rex", "Dog", "German Shepherd", 5, "Maria");
-    Animal a2("Barsik", "Cat", "British Shorthair", 3, "Alexey");
-
-    std::cout << std::boolalpha
-              << "a1 == a2: " << (a1 == a2) << "\n"
-              << "a1 > a2: " << (a1 > a2) << "\n\n"
-              << std::noboolalpha;
 
     Dog dog("Sharik", "Mongrel", 4, "Igor", 3);
     Bird bird("Gosha", "Macaw", 8, "Viktor", 90);
@@ -53,7 +45,6 @@ int main()
     std::vector<std::shared_ptr<Animal>> pets = {
         std::make_shared<Dog>(dog),
         std::make_shared<Bird>(bird),
-        std::make_shared<Animal>("Kaa", "Reptile", "Boa", 4, "Pavel")
     };
 
     for (const auto& pet : pets)

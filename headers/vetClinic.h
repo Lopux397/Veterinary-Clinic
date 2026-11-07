@@ -28,6 +28,8 @@ public:
 
     bool appointmentCheck(std::string_view vetSpeciality, const Animal& patient) const;
 
+    bool removeAnimal(std::string_view name, std::string_view owner);
+
     void infoAnimal() const;
     void infoVet() const;
     void infoAppeals() const;

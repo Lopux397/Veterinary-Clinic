@@ -7,6 +7,24 @@ bool VetClinic::appointmentCheck(std::string_view vetSpeciality, const Animal& p
     return patient.canBeTreatedBy(vetSpeciality);
 }
 
+bool VetClinic::removeAnimal(std::string_view name, std::string_view owner)
+{
+    auto it = std::find_if(animal.begin(), animal.end(),
+        [&name, &owner](const std::shared_ptr<Animal>& current)
+        {
+            return current->getName() == name && current->getOwner() == owner;
+        });
+
+    if (it == animal.end())
+    {
+        std::cout << "Animal not found!" << std::endl;
+        return false;
+    }
+
+    animal.erase(it);
+    return true;
+}
+
 void VetClinic::setAnimal(std::shared_ptr<Animal> animalTemp)
 {
     if (!animalTemp) return;

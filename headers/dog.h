@@ -15,6 +15,8 @@ public:
 
     unsigned int weeklyWalkHours() const;
 
+    double checkupPrice() const override;
+
     std::string makeSound() const override;
     std::string careAdvice() const override;
 
