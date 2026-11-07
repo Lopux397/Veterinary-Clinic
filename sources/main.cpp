@@ -35,25 +35,21 @@ int main()
     clinic.setAppeals("Ornithologist", "Kesha", "14.09.2026", "Feather problems", "Vitamin B12");
     clinic.setAppeals("Rodentologist", "Homa", "15.09.2026", "Paw dislocation", "Fixing bandage");
 
-
-    Dog dog("Sharik", "Mongrel", 4, "Igor", 3);
-    Bird bird("Gosha", "Macaw", 8, "Viktor", 90);
-
-    std::cout << dog.getName() << " walks " << dog.weeklyWalkHours() << " h/week\n"
-              << bird.getName() << " needs a cage " << bird.minCageWidth() << " cm wide\n\n";
-
+       
     std::vector<std::shared_ptr<Animal>> pets = {
-        std::make_shared<Dog>(dog),
-        std::make_shared<Bird>(bird),
+        std::make_shared<Dog>("Sharik", "Mongrel", 4, "Igor", 3),
+        std::make_shared<Bird>("Gosha", "Macaw", 8, "Viktor", 90),
+        std::make_shared<Cat>("Barsik", "British Shorthair", 3, "Alexey", 4),
+        std::make_shared<Rodent>("Homa", "Djungarian hamster", 1, "Dmitry", 15.5)
     };
 
-    for (const auto& pet : pets)
-        std::cout << " " << pet->getName() << ": " << pet->makeSound() << "\n";
 
-    std::cout << "\n" << dog << "\n";
-
-    bird.print(std::cout);
-    
+    for (const auto& pet : pets) 
+    {
+        std::cout << pet->getType() << " " << pet->getName() << ": " << pet->makeSound() << " | " << pet->checkupPrice() << " | " << pet->careAdvice() << std::endl;
+    }
+        
+    std::cout << std::endl;
 
     while (!end) menu(clinic, end);
     return 0;

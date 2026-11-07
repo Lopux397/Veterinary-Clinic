@@ -1,6 +1,5 @@
 ﻿#include "../headers/animal.h"
 
-Animal::Animal() = default;
 Animal::Animal(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp)
     : name(nameTemp), breed(breedTemp), age(ageTemp), owner(ownerTemp) {
 }
@@ -34,6 +33,7 @@ bool Animal::canBeTreatedBy(std::string_view vetSpeciality) const
 void Animal::print(std::ostream& os) const
 {
     os << name << std::endl;
+    os << getType() << std::endl;
     os << breed << std::endl;
     os << age << std::endl;
     os << owner << std::endl;

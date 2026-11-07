@@ -28,7 +28,7 @@ std::string Cat::makeSound() const
 
 std::string Cat::careAdvice() const
 {
-    return Animal::careAdvice() + " Monitor the condition of the coat.";
+    return Animal::careAdvice() + " Brush the cat " + std::to_string(groomingsPerWeek()) + " times a week.";
 }
 
 void Cat::print(std::ostream& os) const

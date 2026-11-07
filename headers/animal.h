@@ -10,17 +10,14 @@
 class Animal
 {
 private:
-
     std::string name;
     std::string breed;
     unsigned int age = 0;
     std::string owner;
 protected:
     static void skipLine(std::istream& is);
-public:
-    Animal();
     Animal(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp);
-
+public:
     Animal(const Animal&) = default;
     Animal& operator=(const Animal&) = default;
     Animal(Animal&&) = default;
