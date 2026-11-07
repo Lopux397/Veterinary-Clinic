@@ -1,19 +1,20 @@
 ﻿#pragma once
 
 #include "../headers/animal.h"
+#include <algorithm>
 
 class Cat : public Animal
 {
 private:
-    unsigned int outdoorHours = 0; //Часы вне дома
+    unsigned int hairballsPerMonth = 0; //волосяные комки в месяц
 public:
     Cat();
-    Cat(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int outdoorHoursTemp);
+    Cat(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int hairballsPerMonthTemp);
 
-    void setOutdoorHours(unsigned int outdoorHoursTemp);
-    unsigned int getOutdoorHours() const;
+    void setHairballsPerMonth(unsigned int hairballsPerMonthTemp);
+    unsigned int getHairballsPerMonth() const;
     
-    unsigned int parasiteTreatmentsPerYear() const;
+    unsigned int groomingsPerWeek() const;
 
     std::string makeSound() const override;
     std::string careAdvice() const override;

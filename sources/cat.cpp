@@ -2,16 +2,16 @@
 
 Cat::Cat() : Animal("", "Cat", "", 0, "") {
 }
-Cat::Cat(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int outdoorHoursTemp)
-    : Animal(nameTemp, "Cat", breedTemp, ageTemp, ownerTemp), outdoorHours(outdoorHoursTemp) {
+Cat::Cat(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int hairballsPerMonthTemp)
+    : Animal(nameTemp, "Cat", breedTemp, ageTemp, ownerTemp), hairballsPerMonth(hairballsPerMonthTemp) {
 }
 
-void Cat::setOutdoorHours(unsigned int outdoorHoursTemp) { outdoorHours = outdoorHoursTemp; }
-unsigned int Cat::getOutdoorHours() const { return outdoorHours; }
+void Cat::setHairballsPerMonth(unsigned int hairballsPerMonthTemp) { hairballsPerMonth = hairballsPerMonthTemp; }
+unsigned int Cat::getHairballsPerMonth() const { return hairballsPerMonth; }
 
-unsigned int Cat::parasiteTreatmentsPerYear() const 
+unsigned int Cat::groomingsPerWeek() const 
 {
-    return (2 + (outdoorHours / 2));
+    return std::min((unsigned int)7, 1 + hairballsPerMonth / 2);
 }
 
 std::string Cat::makeSound() const
@@ -21,23 +21,23 @@ std::string Cat::makeSound() const
 
 std::string Cat::careAdvice() const
 {
-    return Animal::careAdvice() + " Keep track of the number of parasite treatments per year.";
+    return Animal::careAdvice() + " Monitor the condition of the coat.";
 }
 
 void Cat::print(std::ostream& os) const
 {
     Animal::print(os);
-    os << "OutdoorHours: " << outdoorHours << std::endl;
+    os << "HairballsPerMonth: " << hairballsPerMonth << std::endl;
 }
 
 void Cat::read(std::istream& is)
 {
     Animal::read(is);
-    is >> outdoorHours;
+    is >> hairballsPerMonth;
     skipLine(is);
 }
 
 std::string Cat::inputHint() const
 {
-    return Animal::inputHint() + " / Number of hours spent away from home";
+    return Animal::inputHint() + " / Number of hairballs per month";
 }
