@@ -21,7 +21,7 @@ std::string Bird::makeSound() const
 
 double Bird::checkupPrice() const 
 {
-    return 67 + wingspan * 0.5 + (getWingspan() > 50) ? 25 : 0;
+    return 67 + wingspan * 0.5 + ((getWingspan() > 50) ? 25 : 0);
 }
 
 std::string Bird::careAdvice() const

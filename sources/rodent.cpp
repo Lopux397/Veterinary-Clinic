@@ -18,7 +18,7 @@ unsigned int Rodent::daysUntilDentalTrim() const
 
 double Rodent::checkupPrice() const 
 {
-    return 67 + (daysUntilDentalTrim() == 0) ? 20 : 0;
+    return 67 + ((daysUntilDentalTrim() == 0) ? 20 : 0);
 }
 
 std::string Rodent::makeSound() const

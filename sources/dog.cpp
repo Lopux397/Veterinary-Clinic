@@ -16,7 +16,7 @@ unsigned int Dog::weeklyWalkHours() const
 
 double Dog::checkupPrice() const
 {
-    return 67 + weeklyWalkHours() * 2 + (getAge() > 8) ? 15 : 0;
+    return 67 + weeklyWalkHours() * 2 + ((getAge() > 8) ? 15 : 0);
 }
 
 std::string Dog::makeSound() const
