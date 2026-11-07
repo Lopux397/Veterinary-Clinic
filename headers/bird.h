@@ -17,6 +17,8 @@ public:
 
     double checkupPrice() const override;
 
+    std::string getType() const override;
+
     std::string makeSound() const override;
     std::string careAdvice() const override;
     bool canBeTreatedBy(std::string_view vetSpeciality) const override;

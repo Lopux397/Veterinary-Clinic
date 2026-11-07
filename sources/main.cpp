@@ -48,9 +48,12 @@ int main()
     };
 
     for (const auto& pet : pets)
-        std::cout << pet->getView() << " " << pet->getName() << ": " << pet->makeSound() << "\n";
+        std::cout << " " << pet->getName() << ": " << pet->makeSound() << "\n";
 
     std::cout << "\n" << dog << "\n";
+
+    bird.print(std::cout);
+    
 
     while (!end) menu(clinic, end);
     return 0;

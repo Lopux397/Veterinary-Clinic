@@ -1,9 +1,9 @@
 ﻿#include "../headers/rodent.h"
 
-Rodent::Rodent() : Animal("", "Rodent", "", 0, "") {
+Rodent::Rodent() : Animal("", "", 0, "") {
 }
 Rodent::Rodent(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, double incisorLengthTemp)
-    : Animal(nameTemp, "Rodent", breedTemp, ageTemp, ownerTemp), incisorLength(incisorLengthTemp) {
+    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp), incisorLength(incisorLengthTemp) {
 }
 
 void Rodent::setIncisorLength(double incisorLengthTemp) { incisorLength = incisorLengthTemp; }
@@ -20,6 +20,8 @@ double Rodent::checkupPrice() const
 {
     return 67 + ((daysUntilDentalTrim() == 0) ? 20 : 0);
 }
+
+std::string Rodent::getType() const { return "Rodent"; }
 
 std::string Rodent::makeSound() const
 {

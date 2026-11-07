@@ -12,7 +12,6 @@ class Animal
 private:
 
     std::string name;
-    std::string view;
     std::string breed;
     unsigned int age = 0;
     std::string owner;
@@ -20,7 +19,7 @@ protected:
     static void skipLine(std::istream& is);
 public:
     Animal();
-    Animal(std::string_view nameTemp, std::string_view viewTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp);
+    Animal(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp);
 
     Animal(const Animal&) = default;
     Animal& operator=(const Animal&) = default;
@@ -29,20 +28,19 @@ public:
     virtual ~Animal() = default;
     
     void setName(std::string_view nameTemp);
-    void setView(std::string_view viewTemp);
     void setBreed(std::string_view breedTemp);
     void setAge(const unsigned int ageTemp);
     void setOwner(std::string_view ownerTemp);
 
     std::string getName() const;
-    std::string getView() const;
     std::string getBreed() const;
     unsigned int getAge() const;
     std::string getOwner() const;
 
     virtual double checkupPrice() const = 0;
+    virtual std::string makeSound() const = 0;
+    virtual std::string getType() const = 0;
 
-    virtual std::string makeSound() const;
     virtual std::string careAdvice() const;
     virtual bool canBeTreatedBy(std::string_view vetSpeciality) const;
 

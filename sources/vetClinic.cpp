@@ -73,7 +73,7 @@ bool VetClinic::setAppeals(std::string_view vetSpeciality, std::string_view name
 
     if (!appointmentCheck(vetSpeciality, *addsAnimal)) 
     {
-        std::cout << "A "<< vetSpeciality << " cannot treat a " << addsAnimal->getView() << std::endl;
+        std::cout << "A "<< vetSpeciality << " cannot treat a " << addsAnimal->getType() << std::endl;
         return false;
     }
 

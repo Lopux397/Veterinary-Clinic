@@ -16,6 +16,7 @@ public:
     unsigned int daysUntilDentalTrim() const;
 
     double checkupPrice() const override;
+    std::string getType() const override;
 
     std::string makeSound() const override;
     std::string careAdvice() const override;

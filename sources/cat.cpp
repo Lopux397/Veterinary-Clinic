@@ -1,9 +1,9 @@
 ﻿#include "../headers/cat.h"
 
-Cat::Cat() : Animal("", "Cat", "", 0, "") {
+Cat::Cat() : Animal("", "", 0, "") {
 }
 Cat::Cat(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int hairballsPerMonthTemp)
-    : Animal(nameTemp, "Cat", breedTemp, ageTemp, ownerTemp), hairballsPerMonth(hairballsPerMonthTemp) {
+    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp), hairballsPerMonth(hairballsPerMonthTemp) {
 }
 
 void Cat::setHairballsPerMonth(unsigned int hairballsPerMonthTemp) { hairballsPerMonth = hairballsPerMonthTemp; }
@@ -18,6 +18,8 @@ double Cat::checkupPrice() const
 {
     return 67 + groomingsPerWeek() * 4;
 }
+
+std::string Cat::getType() const { return "Cat"; }
 
 std::string Cat::makeSound() const
 {
