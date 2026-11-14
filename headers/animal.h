@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <string_view>
+#include <memory>
 #include <limits>
 #include <algorithm>
 #include <compare>
@@ -12,7 +13,7 @@ class Animal
 private:
     std::string name;
     std::string breed;
-    unsigned int age = 0;
+    unsigned int age{};
     std::string owner;
 protected:
     static void skipLine(std::istream& is);
@@ -58,6 +59,14 @@ public:
         return is;
     }
 
+    friend std::ostream& operator<< (std::ostream& os, const std::shared_ptr<Animal>& ani)
+    {
+        ani->print(os);
+
+        return os;
+    }
+
     bool operator== (const Animal& ani) const;
+
     std::strong_ordering operator<=> (const Animal& ani) const;
 };
