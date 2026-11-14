@@ -81,5 +81,6 @@ public:
 	{
 		for (const auto& item : items)
 			os << item << std::endl;
+		os.flush();
 	}
 };

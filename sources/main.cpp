@@ -21,7 +21,7 @@ int main()
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
 
-    /*VetClinic clinic;
+    VetClinic clinic;
     bool end = false;
 
     clinic.setVet(Vet("Ivan Ivanov", "Therapist"));
@@ -36,20 +36,7 @@ int main()
     clinic.setAppeals("Therapist", "Rex", "13.09.2026", "Routine checkup", "Vitamin course");
     clinic.setAppeals("Ornithologist", "Kesha", "14.09.2026", "Feather problems", "Vitamin B12");
     clinic.setAppeals("Rodentologist", "Homa", "15.09.2026", "Paw dislocation", "Fixing bandage");
- 
-    std::vector<std::shared_ptr<Animal>> pets = {
-        std::make_shared<Dog>("Sharik", "Mongrel", 4, "Igor", 3),
-        std::make_shared<Bird>("Gosha", "Macaw", 8, "Viktor", 90),
-        std::make_shared<Cat>("Barsik", "British Shorthair", 3, "Alexey", 4),
-        std::make_shared<Rodent>("Homa", "Djungarian hamster", 1, "Dmitry", 15.5)
-    };
-
-    for (const auto& pet : pets) 
-        std::cout << pet->getType() << " " << pet->getName() << ": " << pet->makeSound() << " | " << pet->checkupPrice() << " | " << pet->careAdvice() << std::endl;
         
-    std::cout << std::endl;
-
-    while (!end) menu(clinic, end);*/
 
 
     Collection<std::shared_ptr<Animal>> animal;
@@ -65,9 +52,8 @@ int main()
     std::cout << animal[1];
     std::cout << "-------------------------------Search-----------------------------------" << std::endl;
     std::string type{ "Rodent" };
-    auto check = animal.findIf([&type](const auto& item) { return item->getType() == type;});
-    if (check)
-        std::cout << *(check);
+    if (auto check = animal.findIf([&type](const auto& item) { return item->getType() == type;}); check)
+        std::cout << *check;
     else
         std::cout << "No result" << std::endl;
     std::cout << "-------------------------------Remove-----------------------------------" << std::endl;
@@ -102,9 +88,8 @@ int main()
     std::cout << vet[2];
     std::cout << "-------------------------------Search-----------------------------------" << std::endl;
     std::string speciality{ "Rodentologist" };
-    auto checkV2 = vet.findIf([&speciality](const auto& item) { return item.getSpeciality() == speciality;});
-    if (checkV2)
-        std::cout << *(checkV2);
+    if (auto checkV2 = vet.findIf([&speciality](const auto& item) { return item.getSpeciality() == speciality;}); checkV2)
+        std::cout << *checkV2;
     else
         std::cout << "No result" << std::endl;
     std::cout << "--------------------------------Template function-----------------------" << std::endl;
@@ -138,9 +123,8 @@ int main()
     std::cout << "------------------------------Index-------------------------------------" << std::endl;
     std::cout << integer[0] << std::endl;
     std::cout << "-------------------------------Search-----------------------------------" << std::endl;
-    auto checkV3 = integer.findIf([](const auto& item) { return item < 0;});
-    if (checkV3)
-        std::cout << *(checkV3) << std::endl;
+    if (auto checkV3 = integer.findIf([](const auto& item) { return item < 0;}); checkV3)
+        std::cout << *checkV3 << std::endl;
     else
         std::cout << "No result" << std::endl;
     std::cout << "--------------------------------Template function-----------------------" << std::endl;
@@ -158,5 +142,7 @@ int main()
     integer.clear();
     std::cout << "Is the collection empty? - " << integer.empty() << std::endl;
 
+    std::cout << std::endl;
+    while (!end) menu(clinic, end);
     return 0;
 }
