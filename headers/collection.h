@@ -81,6 +81,6 @@ public:
 	{
 		for (const auto& item : items)
 			os << item << std::endl;
-		os.flush();
+		os.flush(); //принудительно сбрасывает буфер потока на вывод
 	}
 };
