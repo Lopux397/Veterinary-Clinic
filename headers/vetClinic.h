@@ -3,6 +3,7 @@
 #include "../headers/animal.h"
 #include "../headers/vet.h"
 #include "../headers/appeals.h"
+#include "../headers/collection.h"
 
 #include <iostream>
 #include <memory>
@@ -13,9 +14,9 @@
 class VetClinic
 {
 private:
-    std::vector<std::shared_ptr<Animal>> animal;
-    std::vector<Vet> vet;
-    std::vector<Appeals> appeals;
+    Collection<std::shared_ptr<Animal>> animal;
+    Collection<Vet> vet;
+    Collection<Appeals> appeals;
 public:
     VetClinic();
 

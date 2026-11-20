@@ -9,33 +9,29 @@ bool VetClinic::appointmentCheck(std::string_view vetSpeciality, const Animal& p
 
 bool VetClinic::removeAnimal(std::string_view name, std::string_view owner)
 {
-    auto it = std::find_if(animal.begin(), animal.end(),
+    bool removed = animal.removeIf(
         [&name, &owner](const std::shared_ptr<Animal>& current)
         {
             return current->getName() == name && current->getOwner() == owner;
         });
 
-    if (it == animal.end())
-    {
+    if (!removed)
         std::cout << "Animal not found!" << std::endl;
-        return false;
-    }
 
-    animal.erase(it);
-    return true;
+    return removed;
 }
 
 void VetClinic::setAnimal(std::shared_ptr<Animal> animalTemp)
 {
     if (!animalTemp) return;
 
-    animal.push_back(std::move(animalTemp));
+    animal.add(animalTemp);
     std::sort(animal.begin(), animal.end(), [](const std::shared_ptr<Animal>& a, const std::shared_ptr<Animal>& b) { return *a < *b; });
 }
 
 void VetClinic::setVet(const Vet& vetTemp)
 {
-    vet.push_back(vetTemp);
+    vet.add(vetTemp);
 }
 
 bool VetClinic::setAppeals(std::string_view vetSpeciality, std::string_view nameAnimal, std::string_view date, const std::string_view diagnosis, std::string_view treatment)
@@ -77,7 +73,7 @@ bool VetClinic::setAppeals(std::string_view vetSpeciality, std::string_view name
         return false;
     }
 
-    appeals.emplace_back(*addsDoc, addsAnimal, date, diagnosis, treatment);
+    appeals.add(Appeals(*addsDoc, addsAnimal, date, diagnosis, treatment));
     
     return true;
 }
@@ -128,24 +124,16 @@ VetClinic& VetClinic::operator+=(const Vet& v)
 
 VetClinic& VetClinic::operator-=(const Animal& ani)
 {
-    auto it = std::find_if(animal.begin(), animal.end(), [&ani](const std::shared_ptr<Animal>& current) { return *current == ani; });
-    if (it == animal.end())
-    {
+    if (!animal.removeIf([&ani](const std::shared_ptr<Animal>& current) { return *current == ani; }))
         std::cout << "Animal not found!" << std::endl;
-        return *this;
-    }
-    animal.erase(it);
+
     return *this;
 }
 
 VetClinic& VetClinic::operator-=(const Vet& v)
 {
-    auto it = std::find(vet.begin(), vet.end(), v);
-    if (it == vet.end())
-    {
+    if (!vet.removeIf([&v](const Vet& current) { return current == v; }))
         std::cout << "Vet not found!" << std::endl;
-        return *this;
-    }
-    vet.erase(it);
+
     return *this;
 }

@@ -44,6 +44,11 @@ public:
 		return	items[index];
 	}
 
+	const T& operator[](std::size_t index) const
+	{
+		return items[index];
+	}
+
 	auto begin() 
 	{
 		return items.begin();
