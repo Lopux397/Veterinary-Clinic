@@ -6,5 +6,5 @@
 class DuplicateException : public std::runtime_error //Исключение: дубликат
 {
 public:
-	DuplicateException(const std::string& msg) : std::runtime_error(msg) {}
+	explicit DuplicateException(const std::string& msg) : std::runtime_error(msg) {}
 };

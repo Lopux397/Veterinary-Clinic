@@ -22,8 +22,6 @@ void Animal::setBreed(std::string_view breedTemp)
 }
 void Animal::setAge(unsigned int ageTemp)
 { 
-    if (ageTemp < 0)
-        throw InvalidDataException("The age cannot be negative");
     if (ageTemp > 30)
         throw InvalidDataException("The age cannot be too large");
 
@@ -69,7 +67,9 @@ void Animal::print(std::ostream& os) const
 
 void Animal::read(std::istream& is)
 {
-    std::string nameTemp, breedTemp, ownerTemp;
+    std::string nameTemp;
+    std::string breedTemp;
+    std::string ownerTemp;
     unsigned int ageTemp{};
 
     std::getline(is, nameTemp);

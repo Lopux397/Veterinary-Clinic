@@ -6,5 +6,5 @@
 class InputFormatException : public std::runtime_error //Исключение при форматировании входных данных
 {
 public:
-	InputFormatException(const std::string& msg) : std::runtime_error(msg) {}
+	explicit InputFormatException(const std::string& msg) : std::runtime_error(msg) {}
 };

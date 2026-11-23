@@ -70,10 +70,6 @@ void menu(VetClinic& clinic, bool& end)
             {
                 std::cout << "\n!!!Duplicate exception: " << e.what() << std::endl;
             }
-            catch (const std::exception& e)
-            {
-                std::cout << "\n!!!Error: " << e.what() << std::endl;
-            }
             
             std::cout << std::endl;
             break;
@@ -120,10 +116,6 @@ void menu(VetClinic& clinic, bool& end)
             {
                 std::cout << "\n!!!Duplicate: " << e.what() << std::endl;
             }
-            catch (const std::exception& e)
-            {
-                std::cout << "\n!!!Error: " << e.what() << std::endl;
-            }
 
             std::cout << std::endl;
             break;
@@ -168,10 +160,6 @@ void menu(VetClinic& clinic, bool& end)
             {
                 std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
             }
-            catch (const std::exception& e)
-            {
-                std::cout << "\n!!!Error: " << e.what() << std::endl;
-            }
 
             std::cout << std::endl;
             break;
@@ -211,10 +199,6 @@ void menu(VetClinic& clinic, bool& end)
             {
                 std::cout << "\n!!!Not found: " << e.what() << std::endl;
             }
-            catch (const std::exception& e)
-            {
-                std::cout << "\n!!!Error: " << e.what() << std::endl;
-            }
             std::cout << std::endl;
             break;
         }
@@ -239,10 +223,6 @@ void menu(VetClinic& clinic, bool& end)
             catch (const NotFoundException& e) 
             {
                 std::cout << "\n!!!Not found: " << e.what() << std::endl;
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "\n!!!Error: " << e.what() << std::endl;
             }
 
             std::cout << std::endl;

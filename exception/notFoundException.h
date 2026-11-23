@@ -6,5 +6,5 @@
 class NotFoundException : public std::runtime_error //Исключение «Не найдено»
 {
 public:
-	NotFoundException(const std::string& msg) : std::runtime_error(msg) {}
+	explicit NotFoundException(const std::string& msg) : std::runtime_error(msg) {}
 };

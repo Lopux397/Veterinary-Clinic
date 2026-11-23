@@ -53,10 +53,6 @@ int main()
         {
             std::cout << "\n!!!Input format: " << e.what() << std::endl;
         }
-        catch (const std::exception& e)
-        {
-            std::cout << "\n!!!Error: " << e.what() << std::endl;
-        }
     }
     return 0;
 }

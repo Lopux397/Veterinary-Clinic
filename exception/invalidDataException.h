@@ -6,5 +6,5 @@
 class InvalidDataException : public std::invalid_argument //Исключение: недопустимые данные
 {
 public:
-	InvalidDataException(const std::string& msg) : std::invalid_argument(msg) {}
+	explicit InvalidDataException(const std::string& msg) : std::invalid_argument(msg) {}
 };
