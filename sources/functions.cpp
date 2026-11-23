@@ -25,205 +25,202 @@ void clearInput()
     std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 }
 
-namespace
+void printMenu()
 {
-    void printMenu()
+    std::cout << "=============== Menu ================" << std::endl;
+    std::cout << "1. Add a veterinarian" << std::endl;
+    std::cout << "2. Add an animal" << std::endl;
+    std::cout << "3. Schedule an appointment" << std::endl;
+    std::cout << "4. Show all doctors" << std::endl;
+    std::cout << "5. Show all animals" << std::endl;
+    std::cout << "6. Show appointment history" << std::endl;
+    std::cout << "7. Remove veterinarian" << std::endl;
+    std::cout << "8. Remove the animal" << std::endl;
+    std::cout << "0. Exit" << std::endl;
+    std::cout << "=====================================" << std::endl;
+}
+
+int readMenuOption()
+{
+    int option = -1;
+    std::cout << "Select the item number: ";
+    std::cin >> option;
+
+    if (std::cin.fail())
     {
-        std::cout << "=============== Menu ================" << std::endl;
-        std::cout << "1. Add a veterinarian" << std::endl;
-        std::cout << "2. Add an animal" << std::endl;
-        std::cout << "3. Schedule an appointment" << std::endl;
-        std::cout << "4. Show all doctors" << std::endl;
-        std::cout << "5. Show all animals" << std::endl;
-        std::cout << "6. Show appointment history" << std::endl;
-        std::cout << "7. Remove veterinarian" << std::endl;
-        std::cout << "8. Remove the animal" << std::endl;
-        std::cout << "0. Exit" << std::endl;
-        std::cout << "=====================================" << std::endl;
-    }
-
-    int readMenuOption()
-    {
-        int option = -1;
-        std::cout << "Select the item number: ";
-        std::cin >> option;
-
-        if (std::cin.fail())
-        {
-            clearInput();
-            throw InputFormatException("Menu items must be a number");
-        }
-
         clearInput();
-        if (option < 0 || option > 8)
-        {
-            throw InputFormatException("The menu items cannot be negative or more menu items");
-        }
-
-        return option;
+        throw InputFormatException("Menu items must be a number");
     }
 
-    void addVeterinarian(VetClinic& clinic)
+    clearInput();
+    if (option < 0 || option > 8)
     {
-        Vet vet;
-        std::cout << "Enter vet data (full name / specialization, each on its own line):" << std::endl;
-
-        try
-        {
-            std::cin >> vet;
-            clinic += vet;
-            std::cout << "\nVet added successfully" << std::endl;
-        }
-        catch (const InvalidDataException& e)
-        {
-            std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
-        }
-        catch (const DuplicateException& e)
-        {
-            std::cout << "\n!!!Duplicate exception: " << e.what() << std::endl;
-        }
-
-        std::cout << std::endl;
+        throw InputFormatException("The menu items cannot be negative or more menu items");
     }
 
-    std::shared_ptr<Animal> readAnimalType()
+    return option;
+}
+
+void addVeterinarian(VetClinic& clinic)
+{
+    Vet vet;
+    std::cout << "Enter vet data (full name / specialization, each on its own line):" << std::endl;
+
+    try
     {
-        int type = 0;
-        std::cout << "Animal type: 1. Dog  2. Cat  3. Bird  4. Rodent" << std::endl;
-        std::cout << "Select the type: ";
-        std::cin >> type;
+        std::cin >> vet;
+        clinic += vet;
+        std::cout << "\nVet added successfully" << std::endl;
+    }
+    catch (const InvalidDataException& e)
+    {
+        std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
+    }
+    catch (const DuplicateException& e)
+    {
+        std::cout << "\n!!!Duplicate exception: " << e.what() << std::endl;
+    }
 
-        if (std::cin.fail())
-        {
-            clearInput();
-            throw InputFormatException("Animal type must be a number");
-        }
+    std::cout << std::endl;
+}
 
+std::shared_ptr<Animal> readAnimalType()
+{
+    int type = 0;
+    std::cout << "Animal type: 1. Dog  2. Cat  3. Bird  4. Rodent" << std::endl;
+    std::cout << "Select the type: ";
+    std::cin >> type;
+
+    if (std::cin.fail())
+    {
         clearInput();
-        if (type < 1 || type > 4)
-        {
-            throw InputFormatException("The animal type cannot be negative or more menu items");
-        }
-
-        switch (type)
-        {
-        case 1: return std::make_shared<Dog>();
-        case 2: return std::make_shared<Cat>();
-        case 3: return std::make_shared<Bird>();
-        case 4: return std::make_shared<Rodent>();
-        default: throw InputFormatException("Unknown animal type");
-        }
+        throw InputFormatException("Animal type must be a number");
     }
 
-    void addAnimal(VetClinic& clinic)
+    clearInput();
+    if (type < 1 || type > 4)
     {
-        std::shared_ptr<Animal> animal = readAnimalType();
-        std::cout << "Enter animal data (" << animal->inputHint() << ", each on its own line):" << std::endl;
-
-        try
-        {
-            std::cin >> *animal;
-            clinic += animal;
-            std::cout << "\nAnimal added successfully" << std::endl;
-        }
-        catch (const InputFormatException& e)
-        {
-            std::cout << "\n!!!Input format: " << e.what() << std::endl;
-        }
-        catch (const InvalidDataException& e)
-        {
-            std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
-        }
-        catch (const DuplicateException& e)
-        {
-            std::cout << "\n!!!Duplicate: " << e.what() << std::endl;
-        }
-
-        std::cout << std::endl;
+        throw InputFormatException("The animal type cannot be negative or more menu items");
     }
 
-    void scheduleAppointment(VetClinic& clinic)
+    switch (type)
     {
-        std::string vetSpeciality;
-        std::string nameAnimal;
-        std::string date;
-        std::string diagnosis;
-        std::string treatment;
-
-        std::cout << "Enter the vet's specialization: ";
-        std::getline(std::cin, vetSpeciality);
-        std::cout << "Enter the animal's name: ";
-        std::getline(std::cin, nameAnimal);
-        std::cout << "Enter the date: ";
-        std::getline(std::cin, date);
-        std::cout << "Enter the diagnosis: ";
-        std::getline(std::cin, diagnosis);
-        std::cout << "Enter the prescribed treatment: ";
-        std::getline(std::cin, treatment);
-
-        try
-        {
-            clinic.setAppeals(vetSpeciality, nameAnimal, date, diagnosis, treatment);
-            std::cout << "\nAppeals added successfully" << std::endl;
-        }
-        catch (const NotFoundException& e)
-        {
-            std::cout << "\n!!!Not found: " << e.what() << std::endl;
-        }
-        catch (const IncompatibleVetException& e)
-        {
-            std::cout << "\n!!!Incompatible vet: " << e.what() << std::endl;
-        }
-        catch (const InvalidDataException& e)
-        {
-            std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
-        }
-
-        std::cout << std::endl;
+    case 1: return std::make_shared<Dog>();
+    case 2: return std::make_shared<Cat>();
+    case 3: return std::make_shared<Bird>();
+    case 4: return std::make_shared<Rodent>();
+    default: throw InputFormatException("Unknown animal type");
     }
+}
 
-    void removeVeterinarian(VetClinic& clinic)
+void addAnimal(VetClinic& clinic)
+{
+    std::shared_ptr<Animal> animal = readAnimalType();
+    std::cout << "Enter animal data (" << animal->inputHint() << ", each on its own line):" << std::endl;
+
+    try
     {
-        std::string name;
-        std::cout << "Enter the vet's full name to remove: ";
-        std::getline(std::cin, name);
-
-        try
-        {
-            clinic -= Vet(name, "");
-            std::cout << "\nVet removed successfully" << std::endl;
-        }
-        catch (const NotFoundException& e)
-        {
-            std::cout << "\n!!!Not found: " << e.what() << std::endl;
-        }
-
-        std::cout << std::endl;
+        std::cin >> *animal;
+        clinic += animal;
+        std::cout << "\nAnimal added successfully" << std::endl;
     }
-
-    void removeAnimal(VetClinic& clinic)
+    catch (const InputFormatException& e)
     {
-        std::string name;
-        std::string owner;
-
-        std::cout << "Enter the animal's name to remove: ";
-        std::getline(std::cin, name);
-        std::cout << "Enter the owner's name: ";
-        std::getline(std::cin, owner);
-        std::cout << std::endl;
-
-        try
-        {
-            clinic.removeAnimal(name, owner);
-            std::cout << "Animal removed successfully" << std::endl;
-        }
-        catch (const NotFoundException& e)
-        {
-            std::cout << "\n!!!Not found: " << e.what() << std::endl;
-        }
-
-        std::cout << std::endl;
+        std::cout << "\n!!!Input format: " << e.what() << std::endl;
     }
+    catch (const InvalidDataException& e)
+    {
+        std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
+    }
+    catch (const DuplicateException& e)
+    {
+        std::cout << "\n!!!Duplicate: " << e.what() << std::endl;
+    }
+
+    std::cout << std::endl;
+}
+
+void scheduleAppointment(VetClinic& clinic)
+{
+    std::string vetSpeciality;
+    std::string nameAnimal;
+    std::string date;
+    std::string diagnosis;
+    std::string treatment;
+
+    std::cout << "Enter the vet's specialization: ";
+    std::getline(std::cin, vetSpeciality);
+    std::cout << "Enter the animal's name: ";
+    std::getline(std::cin, nameAnimal);
+    std::cout << "Enter the date: ";
+    std::getline(std::cin, date);
+    std::cout << "Enter the diagnosis: ";
+    std::getline(std::cin, diagnosis);
+    std::cout << "Enter the prescribed treatment: ";
+    std::getline(std::cin, treatment);
+
+    try
+    {
+        clinic.setAppeals(vetSpeciality, nameAnimal, date, diagnosis, treatment);
+        std::cout << "\nAppeals added successfully" << std::endl;
+    }
+    catch (const NotFoundException& e)
+    {
+        std::cout << "\n!!!Not found: " << e.what() << std::endl;
+    }
+    catch (const IncompatibleVetException& e)
+    {
+        std::cout << "\n!!!Incompatible vet: " << e.what() << std::endl;
+    }
+    catch (const InvalidDataException& e)
+    {
+        std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
+    }
+
+    std::cout << std::endl;
+}
+
+void removeVeterinarian(VetClinic& clinic)
+{
+    std::string name;
+    std::cout << "Enter the vet's full name to remove: ";
+    std::getline(std::cin, name);
+
+    try
+    {
+        clinic -= Vet(name, "");
+        std::cout << "\nVet removed successfully" << std::endl;
+    }
+    catch (const NotFoundException& e)
+    {
+        std::cout << "\n!!!Not found: " << e.what() << std::endl;
+    }
+
+    std::cout << std::endl;
+}
+
+void removeAnimal(VetClinic& clinic)
+{
+    std::string name;
+    std::string owner;
+
+    std::cout << "Enter the animal's name to remove: ";
+    std::getline(std::cin, name);
+    std::cout << "Enter the owner's name: ";
+    std::getline(std::cin, owner);
+    std::cout << std::endl;
+
+    try
+    {
+        clinic.removeAnimal(name, owner);
+        std::cout << "Animal removed successfully" << std::endl;
+    }
+    catch (const NotFoundException& e)
+    {
+        std::cout << "\n!!!Not found: " << e.what() << std::endl;
+    }
+
+    std::cout << std::endl;
 }
 
 void menu(VetClinic& clinic, bool& end)
