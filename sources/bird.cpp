@@ -1,12 +1,19 @@
 ﻿#include "../headers/bird.h"
+#include "../exception/invalidDataException.h"
+#include "../exception/inputFormatException.h"
 
-Bird::Bird() : Animal("", "", 0, "") {
-}
+Bird::Bird() : Animal() {}
 Bird::Bird(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int wingspanTemp)
-    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp), wingspan(wingspanTemp) {
-}
+    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp), wingspan(wingspanTemp) 
+{}
 
-void Bird::setWingspan(unsigned int wingspanTemp) { wingspan = wingspanTemp; }
+void Bird::setWingspan(unsigned int wingspanTemp) 
+{
+    if (wingspanTemp > 350)
+        throw InvalidDataException("The wingspan cannot be too large");
+
+    wingspan = wingspanTemp;
+}
 unsigned int Bird::getWingspan() const { return wingspan; }
 
 unsigned int Bird::minCageWidth() const
@@ -46,9 +53,18 @@ void Bird::print(std::ostream& os) const
 
 void Bird::read(std::istream& is)
 {
+    unsigned int wingspanTemp{};
+
     Animal::read(is);
-    is >> wingspan;
+
+    is >> wingspanTemp;
+    if (is.fail()) 
+    {
+        skipLine(is);
+        throw InputFormatException("Wingspan must be a number");
+    }
     skipLine(is);
+    setWingspan(wingspanTemp);
 }
 
 std::string Bird::inputHint() const

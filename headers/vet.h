@@ -29,8 +29,12 @@ public:
     }
     friend std::istream& operator>> (std::istream& is, Vet& v)
     {
-        std::getline(is, v.name);
-        std::getline(is, v.speciality);
+        std::string nameTemp, specialityTemp;
+
+        std::getline(is, nameTemp);
+        v.setName(nameTemp);
+        std::getline(is, specialityTemp);
+        v.setSpeciality(specialityTemp);
 
         return is;
     }

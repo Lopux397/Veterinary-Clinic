@@ -1,12 +1,19 @@
 ﻿#include "../headers/cat.h"
+#include "../exception/invalidDataException.h"
+#include "../exception/inputFormatException.h"
 
-Cat::Cat() : Animal("", "", 0, "") {
-}
+Cat::Cat() : Animal() {}
 Cat::Cat(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int hairballsPerMonthTemp)
-    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp), hairballsPerMonth(hairballsPerMonthTemp) {
-}
+    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp), hairballsPerMonth(hairballsPerMonthTemp)
+{}
 
-void Cat::setHairballsPerMonth(unsigned int hairballsPerMonthTemp) { hairballsPerMonth = hairballsPerMonthTemp; }
+void Cat::setHairballsPerMonth(unsigned int hairballsPerMonthTemp)
+{
+    if (hairballsPerMonthTemp > 30)
+        throw InvalidDataException("The hairballsPerMonth cannot be too large");
+
+    hairballsPerMonth = hairballsPerMonthTemp;
+}
 unsigned int Cat::getHairballsPerMonth() const { return hairballsPerMonth; }
 
 unsigned int Cat::groomingsPerWeek() const 
@@ -39,9 +46,18 @@ void Cat::print(std::ostream& os) const
 
 void Cat::read(std::istream& is)
 {
+    unsigned int hairballsPerMonthTemp{};
+
     Animal::read(is);
-    is >> hairballsPerMonth;
+
+    is >> hairballsPerMonthTemp;
+    if (is.fail())
+    {
+        skipLine(is);
+        throw InputFormatException("Hairballs Per Month must be a number");
+    }
     skipLine(is);
+    setHairballsPerMonth(hairballsPerMonthTemp);
 }
 
 std::string Cat::inputHint() const

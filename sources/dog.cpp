@@ -1,12 +1,19 @@
 ﻿#include "../headers/dog.h"
+#include "../exception/invalidDataException.h"
+#include "../exception/inputFormatException.h"
 
-Dog::Dog() : Animal("", "", 0, "") {
-}
+Dog::Dog() : Animal() {}
 Dog::Dog(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int walksPerDayTemp)
-    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp), walksPerDay(walksPerDayTemp) {
-}
+    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp), walksPerDay(walksPerDayTemp) 
+{}
 
-void Dog::setWalksPerDay(unsigned int walksPerDayTemp) { walksPerDay = walksPerDayTemp; }
+void Dog::setWalksPerDay(unsigned int walksPerDayTemp)
+{ 
+    if (walksPerDayTemp > 50)
+        throw InvalidDataException("The walksPerDay cannot be too large");
+
+    walksPerDay = walksPerDayTemp;
+}
 unsigned int Dog::getWalksPerDay() const { return walksPerDay; }
 
 unsigned int Dog::weeklyWalkHours() const 
@@ -39,9 +46,18 @@ void Dog::print(std::ostream& os) const
 
 void Dog::read(std::istream& is)
 {
+    unsigned int walksPerDayTemp{};
+
     Animal::read(is);
-    is >> walksPerDay;
+
+    is >> walksPerDayTemp;
+    if (is.fail())
+    {
+        skipLine(is);
+        throw InputFormatException("Walks Per Day must be a number");
+    }
     skipLine(is);
+    setWalksPerDay(walksPerDayTemp);
 }
 
 std::string Dog::inputHint() const

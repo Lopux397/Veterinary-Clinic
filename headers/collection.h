@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <ranges>
 
+#include"../exception/outOfRangeException.h"
+
 
 template<typename T>
 class Collection 
@@ -41,11 +43,15 @@ public:
 
 	T& operator[](std::size_t index)
 	{
+		if (index >= items.size() || index < 0)
+			throw OutOfRangeException("Going beyond the bounds of a collection");
 		return	items[index];
 	}
 
 	const T& operator[](std::size_t index) const
 	{
+		if (index >= items.size() || index < 0)
+			throw OutOfRangeException("Going beyond the bounds of a collection");
 		return items[index];
 	}
 

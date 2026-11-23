@@ -1,13 +1,41 @@
 ﻿#include "../headers/animal.h"
+#include "../exception/invalidDataException.h"
+#include "../exception/inputFormatException.h"
 
 Animal::Animal(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp)
-    : name(nameTemp), breed(breedTemp), age(ageTemp), owner(ownerTemp) {
-}
+    : name(nameTemp), breed(breedTemp), age(ageTemp), owner(ownerTemp)
+{}
 
-void Animal::setName(std::string_view nameTemp) { name = nameTemp; }
-void Animal::setBreed(std::string_view breedTemp) { breed = breedTemp; }
-void Animal::setAge(unsigned int ageTemp) { age = ageTemp; }
-void Animal::setOwner(std::string_view ownerTemp) { owner = ownerTemp; }
+void Animal::setName(std::string_view nameTemp)
+{
+    if (nameTemp.empty())
+        throw InvalidDataException("The name cannot be empty");
+
+    name = nameTemp;
+}
+void Animal::setBreed(std::string_view breedTemp)
+{
+    if (breedTemp.empty())
+        throw InvalidDataException("The breed cannot be empty");
+
+    breed = breedTemp;
+}
+void Animal::setAge(unsigned int ageTemp)
+{ 
+    if (ageTemp < 0)
+        throw InvalidDataException("The age cannot be negative");
+    if (ageTemp > 30)
+        throw InvalidDataException("The age cannot be too large");
+
+    age = ageTemp;
+}
+void Animal::setOwner(std::string_view ownerTemp)
+{ 
+    if (ownerTemp.empty())
+        throw InvalidDataException("The owner cannot be empty");
+
+    owner = ownerTemp;
+}
 
 std::string Animal::getName() const { return name; }
 std::string Animal::getBreed() const { return breed; }
@@ -41,13 +69,26 @@ void Animal::print(std::ostream& os) const
 
 void Animal::read(std::istream& is)
 {
-    std::getline(is, name);
-    
-    std::getline(is, breed);
-    is >> age;
-    skipLine(is);
+    std::string nameTemp, breedTemp, ownerTemp;
+    unsigned int ageTemp{};
 
-    std::getline(is, owner);
+    std::getline(is, nameTemp);
+    setName(nameTemp);
+
+    std::getline(is, breedTemp);
+    setBreed(breedTemp);
+
+    is >> ageTemp;
+    if (is.fail()) 
+    {
+        skipLine(is);
+        throw InputFormatException("Age must be a number");
+    }
+    skipLine(is);
+    setAge(ageTemp);
+
+    std::getline(is, ownerTemp);
+    setOwner(ownerTemp);
 }
 
 std::string Animal::inputHint() const

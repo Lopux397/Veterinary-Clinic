@@ -1,12 +1,21 @@
 ﻿#include "../headers/rodent.h"
+#include "../exception/invalidDataException.h"
+#include "../exception/inputFormatException.h"
 
-Rodent::Rodent() : Animal("", "", 0, "") {
-}
+Rodent::Rodent() : Animal() {}
 Rodent::Rodent(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, double incisorLengthTemp)
-    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp), incisorLength(incisorLengthTemp) {
-}
+    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp), incisorLength(incisorLengthTemp) 
+{}
 
-void Rodent::setIncisorLength(double incisorLengthTemp) { incisorLength = incisorLengthTemp; }
+void Rodent::setIncisorLength(double incisorLengthTemp)
+{ 
+    if (incisorLengthTemp < 0)
+        throw InvalidDataException("The incisorLength cannot be negative");
+    if (incisorLengthTemp > 1000)
+        throw InvalidDataException("The incisorLength cannot be too large");
+
+    incisorLength = incisorLengthTemp;
+}
 double Rodent::getIncisorLength() const { return incisorLength; }
 
 unsigned int Rodent::daysUntilDentalTrim() const
@@ -41,9 +50,18 @@ void Rodent::print(std::ostream& os) const
 
 void Rodent::read(std::istream& is)
 {
+    double incisorLengthTemp{};
+
     Animal::read(is);
-    is >> incisorLength;
+
+    is >> incisorLengthTemp;
+    if (is.fail())
+    {
+        skipLine(is);
+        throw InputFormatException("Incisor length must be a number");
+    }
     skipLine(is);
+    setIncisorLength(incisorLengthTemp);
 }
 
 std::string Rodent::inputHint() const

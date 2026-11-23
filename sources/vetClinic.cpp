@@ -1,4 +1,8 @@
 ﻿#include "../headers/vetClinic.h"
+#include "../exception/notFoundException.h"
+#include "../exception/invalidDataException.h"
+#include "../exception/incompatibleVetException.h"
+#include "../exception/duplicateException.h"
 
 VetClinic::VetClinic() = default;
 
@@ -16,14 +20,18 @@ bool VetClinic::removeAnimal(std::string_view name, std::string_view owner)
         });
 
     if (!removed)
-        std::cout << "Animal not found!" << std::endl;
+        throw NotFoundException("Animal '" + std::string(name) + "', owner '" + std::string(owner) + "': not found!");
 
     return removed;
 }
 
 void VetClinic::setAnimal(std::shared_ptr<Animal> animalTemp)
 {
-    if (!animalTemp) return;
+    if (!animalTemp)
+        throw InvalidDataException("Animal - null pointer");
+
+    if (animal.findIf([&animalTemp](const auto& item) { return *item == *animalTemp; }))
+        throw DuplicateException("Animal '" + std::string(animalTemp->getName()) + "' of owner '" + std::string(animalTemp->getOwner()) + "' already exists");
 
     animal.add(animalTemp);
     std::sort(animal.begin(), animal.end(), [](const std::shared_ptr<Animal>& a, const std::shared_ptr<Animal>& b) { return *a < *b; });
@@ -31,6 +39,9 @@ void VetClinic::setAnimal(std::shared_ptr<Animal> animalTemp)
 
 void VetClinic::setVet(const Vet& vetTemp)
 {
+    if (vet.findIf([&vetTemp](const auto& item) { return item == vetTemp; })) 
+        throw DuplicateException("Vet '" + std::string(vetTemp.getName()) + "' already exists");
+
     vet.add(vetTemp);
 }
 
@@ -47,10 +58,7 @@ bool VetClinic::setAppeals(std::string_view vetSpeciality, std::string_view name
     }
         
     if (!addsDoc)
-    {
-        std::cout<< "Vet not found" << std::endl;
-        return false;
-    }
+        throw NotFoundException("Vet not found");
 
     std::shared_ptr<Animal> addsAnimal;
     for (const auto& currentAnimal : animal) 
@@ -62,16 +70,10 @@ bool VetClinic::setAppeals(std::string_view vetSpeciality, std::string_view name
     }
 
     if (!addsAnimal) 
-    {
-        std::cout << "Animal not found" << std::endl;
-        return false;
-    }
+        throw NotFoundException("Animal not found");
 
-    if (!appointmentCheck(vetSpeciality, *addsAnimal)) 
-    {
-        std::cout << "A "<< vetSpeciality << " cannot treat a " << addsAnimal->getType() << std::endl;
-        return false;
-    }
+    if (!appointmentCheck(vetSpeciality, *addsAnimal))
+        throw IncompatibleVetException("A " + std::string(vetSpeciality) + " cannot treat a " + addsAnimal->getType());
 
     appeals.add(Appeals(*addsDoc, addsAnimal, date, diagnosis, treatment));
     
@@ -125,15 +127,15 @@ VetClinic& VetClinic::operator+=(const Vet& v)
 VetClinic& VetClinic::operator-=(const Animal& ani)
 {
     if (!animal.removeIf([&ani](const std::shared_ptr<Animal>& current) { return *current == ani; }))
-        std::cout << "Animal not found!" << std::endl;
-
+        throw NotFoundException("Animal not found!");
+    
     return *this;
 }
 
 VetClinic& VetClinic::operator-=(const Vet& v)
 {
     if (!vet.removeIf([&v](const Vet& current) { return current == v; }))
-        std::cout << "Vet not found!" << std::endl;
+        throw NotFoundException("Vet '" + v.getName() + "' not found!");
 
     return *this;
 }

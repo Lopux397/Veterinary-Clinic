@@ -7,6 +7,12 @@
 #include "../headers/appeals.h"
 #include "../headers/vetClinic.h"
 #include "../headers/functions.h"
+#include "../exception/duplicateException.h"
+#include "../exception/incompatibleVetException.h"
+#include "../exception/inputFormatException.h"
+#include "../exception/invalidDataException.h"
+#include "../exception/notFoundException.h"
+#include "../exception/outOfRangeException.h"
 
 void clearInput() {
     std::cin.clear();
@@ -17,7 +23,6 @@ void menu(VetClinic& clinic, bool& end)
 {
     int option = -1;
     bool repeat;
-
     std::cout << "=============== Menu ================" << std::endl;
     std::cout << "1. Add a veterinarian" << std::endl;
     std::cout << "2. Add an animal" << std::endl;
@@ -34,7 +39,15 @@ void menu(VetClinic& clinic, bool& end)
         repeat = false;
         std::cout << "Select the item number: ";
         std::cin >> option;
+        if (std::cin.fail()) 
+        {
+            clearInput();
+            throw InputFormatException("Menu items must be a number");
+        }
         clearInput();
+        if (option < 0 || option > 8)
+            throw InputFormatException("The menu items cannot be negative or more menu items");
+
         std::cout << std::endl;
         switch (option) {
         case 1:
@@ -42,9 +55,26 @@ void menu(VetClinic& clinic, bool& end)
             Vet vet;
 
             std::cout << "Enter vet data (full name / specialization, each on its own line):" << std::endl;
-            std::cin >> vet;
 
-            clinic += vet;
+            try 
+            {
+                std::cin >> vet;
+                clinic += vet;
+                std::cout << "\nVet added successfully" << std::endl;
+            }
+            catch (const InvalidDataException& e)
+            {
+                std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
+            }
+            catch (const DuplicateException& e)
+            {
+                std::cout << "\n!!!Duplicate exception: " << e.what() << std::endl;
+            }
+            catch (const std::exception& e)
+            {
+                std::cout << "\n!!!Error: " << e.what() << std::endl;
+            }
+            
             std::cout << std::endl;
             break;
         }
@@ -56,22 +86,45 @@ void menu(VetClinic& clinic, bool& end)
             std::cout << "Animal type: 1. Dog  2. Cat  3. Bird  4. Rodent" << std::endl;
             std::cout << "Select the type: ";
             std::cin >> type;
+            if (std::cin.fail())
+            {
+                clearInput();
+                throw InputFormatException("Animal type must be a number");
+            }
             clearInput();
-
+            if (type < 1 || type > 4)
+                throw InputFormatException("The animal type cannot be negative or more menu items");
+            
             if (type == 1) animal = std::make_shared<Dog>();
             else if (type == 2) animal = std::make_shared<Cat>();
             else if (type == 3) animal = std::make_shared<Bird>();
             else if (type == 4) animal = std::make_shared<Rodent>();
-            else
-            {
-                std::cout << "Unknown animal type" << std::endl << std::endl;
-                break;
-            }
 
             std::cout << "Enter animal data (" << animal->inputHint() << ", each on its own line):" << std::endl;
-            std::cin >> *animal;
 
-            clinic += animal;
+            try
+            {
+                std::cin >> *animal;
+                clinic += animal;
+                std::cout << "\nAnimal added successfully" << std::endl;
+            }
+            catch (const InputFormatException& e)
+            {
+                std::cout << "\n!!!Input format: " << e.what() << std::endl;
+            }
+            catch (const InvalidDataException& e)
+            {
+                std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
+            }
+            catch (const DuplicateException& e)
+            {
+                std::cout << "\n!!!Duplicate: " << e.what() << std::endl;
+            }
+            catch (const std::exception& e)
+            {
+                std::cout << "\n!!!Error: " << e.what() << std::endl;
+            }
+
             std::cout << std::endl;
             break;
         }
@@ -98,7 +151,28 @@ void menu(VetClinic& clinic, bool& end)
             std::cout << "Enter the prescribed treatment: ";
             std::getline(std::cin, treatment);
 
-            clinic.setAppeals(vetSpeciality, nameAnimal, date, diagnosis, treatment);
+            try
+            {
+                clinic.setAppeals(vetSpeciality, nameAnimal, date, diagnosis, treatment);
+                std::cout << "\nAppeals added successfully" << std::endl;
+            }
+            catch (const NotFoundException& e)
+            {
+                std::cout << "\n!!!Not found: " << e.what() << std::endl;
+            }
+            catch (const IncompatibleVetException& e)
+            {
+                std::cout << "\n!!!Incompatible vet: " << e.what() << std::endl;
+            }
+            catch (const InvalidDataException& e)
+            {
+                std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
+            }
+            catch (const std::exception& e)
+            {
+                std::cout << "\n!!!Error: " << e.what() << std::endl;
+            }
+
             std::cout << std::endl;
             break;
         }
@@ -127,8 +201,20 @@ void menu(VetClinic& clinic, bool& end)
             std::cout << "Enter the vet's full name to remove: ";
             std::getline(std::cin, name);
 
-            clinic -= Vet(name, "");
+            try 
+            {
+                clinic -= Vet(name, "");
+                std::cout << "\nVet removed successfully" << std::endl;
 
+            }
+            catch (const NotFoundException& e)
+            {
+                std::cout << "\n!!!Not found: " << e.what() << std::endl;
+            }
+            catch (const std::exception& e)
+            {
+                std::cout << "\n!!!Error: " << e.what() << std::endl;
+            }
             std::cout << std::endl;
             break;
         }
@@ -143,7 +229,21 @@ void menu(VetClinic& clinic, bool& end)
             std::cout << "Enter the owner's name: ";
             std::getline(std::cin, owner);
 
-            clinic.removeAnimal(name, owner);
+            std::cout << std::endl;
+
+            try 
+            {
+                clinic.removeAnimal(name, owner);
+                std::cout << "Animal removed successfully" << std::endl;
+            }
+            catch (const NotFoundException& e) 
+            {
+                std::cout << "\n!!!Not found: " << e.what() << std::endl;
+            }
+            catch (const std::exception& e)
+            {
+                std::cout << "\n!!!Error: " << e.what() << std::endl;
+            }
 
             std::cout << std::endl;
             break;

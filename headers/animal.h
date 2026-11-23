@@ -18,6 +18,7 @@ private:
 protected:
     static void skipLine(std::istream& is);
     Animal(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp);
+    Animal() = default;
 public:
     Animal(const Animal&) = default;
     Animal& operator=(const Animal&) = default;
