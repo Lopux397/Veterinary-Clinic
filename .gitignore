@@ -35,6 +35,7 @@
 *.lib
 
 # Executables
+*.txt
 *.sln
 *.slnx
 *.exe
