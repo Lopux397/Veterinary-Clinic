@@ -64,3 +64,10 @@ std::string Cat::inputHint() const
 {
     return Animal::inputHint() + " / Number of hairballs per month";
 }
+
+void Cat::save(std::ostream& os) const
+{
+    os << "CAT" << "#";
+    Animal::save(os);
+    os << hairballsPerMonth;
+}

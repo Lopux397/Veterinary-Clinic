@@ -64,3 +64,10 @@ std::string Dog::inputHint() const
 {
     return Animal::inputHint() + " / number of walks per day";
 }
+
+void Dog::save(std::ostream& os) const
+{
+    os << "DOG" << "#";
+    Animal::save(os);
+    os << walksPerDay;
+}

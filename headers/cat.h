@@ -26,4 +26,6 @@ public:
     void print(std::ostream& os) const override;
     void read(std::istream& is) override;
     std::string inputHint() const override;
+
+    void save(std::ostream& os) const override;
 };

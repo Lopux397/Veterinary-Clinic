@@ -35,7 +35,7 @@ public:
     friend std::ostream& operator<< (std::ostream& os, const Appeals& app)
     {
         os << app.vet.getSpeciality() << " " << app.vet.getName() << std::endl;
-        if (app.animal) os << app.animal->getType() << " " << app.animal->getName() << std::endl;
+        if (app.animal) os << app.animal->getType() << " '" << app.animal->getName() << "' : " << app.animal->getOwner() << std::endl;
         else os << "-" << std::endl;
         os << app.date << std::endl;
         os << app.diagnosis << std::endl;
@@ -43,4 +43,6 @@ public:
 
         return os;
     }
+
+    void save(std::ostream& os) const;
 };

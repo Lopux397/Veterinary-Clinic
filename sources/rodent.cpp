@@ -73,3 +73,10 @@ bool Rodent::canBeTreatedBy(std::string_view vetSpeciality) const
 {
     return vetSpeciality != "Therapist" && vetSpeciality != "Ornithologist";
 }
+
+void Rodent::save(std::ostream& os) const
+{
+    os << "RODENT" << "#";
+    Animal::save(os);
+    os << incisorLength;
+}

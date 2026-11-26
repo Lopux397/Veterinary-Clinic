@@ -105,3 +105,11 @@ std::strong_ordering Animal::operator<=> (const Animal& ani) const
 {
     return age <=> ani.age;
 }
+
+void Animal::save(std::ostream& os) const
+{
+    os << name << "#";
+    os << breed << "#";
+    os << age << "#";
+    os << owner << "#";
+}

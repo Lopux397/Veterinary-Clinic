@@ -4,6 +4,7 @@
 #include "../headers/vet.h"
 #include "../headers/appeals.h"
 #include "../headers/collection.h"
+#include "../headers/logger.h"
 
 #include <iostream>
 #include <memory>
@@ -17,15 +18,27 @@ private:
     Collection<std::shared_ptr<Animal>> animal;
     Collection<Vet> vet;
     Collection<Appeals> appeals;
+    Logger* logger = nullptr;
 public:
-    VetClinic();
+    VetClinic(Logger* loggerTemp);
 
     VetClinic(const VetClinic&) = delete;
     VetClinic& operator=(const VetClinic&) = delete;
 
+    Collection<std::shared_ptr<Animal>>& getAnimal();
+    Collection<Vet>& getVet();
+    Collection<Appeals>& getAppeals();
+
+    const Collection<std::shared_ptr<Animal>>& getAnimal() const;
+    const Collection<Vet>& getVet() const;
+    const Collection<Appeals>& getAppeals() const;
+
     void setAnimal(std::shared_ptr<Animal> animalTemp);
     void setVet(const Vet& vetTemp);
-    bool setAppeals(std::string_view vetSpeciality, std::string_view nameAnimal, std::string_view date, std::string_view diagnosis, std::string_view treatment);
+    bool setAppeals(std::string_view vetName, std::string_view animalName, std::string_view animalOwner, std::string_view date, std::string_view diagnosis, std::string_view treatment);
+    void setLogger(Logger& loggerTemp);
+
+    void logEvent(const std::string& message) const;
 
     bool appointmentCheck(std::string_view vetSpeciality, const Animal& patient) const;
 

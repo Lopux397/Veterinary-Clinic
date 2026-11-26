@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <string_view>
 #include <algorithm>
@@ -39,6 +40,8 @@ public:
 
         return is;
     }
+
+    void save(std::ostream& os) const;
 
     bool operator== (const Vet& v) const;
 };

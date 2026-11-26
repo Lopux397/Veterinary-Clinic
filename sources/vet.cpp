@@ -24,6 +24,11 @@ void Vet::setSpeciality(std::string_view specialityTemp)
 std::string Vet::getName() const { return name; }
 std::string Vet::getSpeciality() const { return speciality; }
 
+void Vet::save(std::ostream& os) const
+{
+    os << "VET#" << name << "#" << speciality;
+}
+
 bool Vet::operator== (const Vet& v) const 
 {
     return name == v.name;

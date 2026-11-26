@@ -4,7 +4,15 @@
 #include "../exception/incompatibleVetException.h"
 #include "../exception/duplicateException.h"
 
-VetClinic::VetClinic() = default;
+VetClinic::VetClinic(Logger* loggerTemp) : logger(loggerTemp) {}
+
+Collection<std::shared_ptr<Animal>>& VetClinic::getAnimal()  { return animal; }
+Collection<Vet>& VetClinic::getVet() { return vet; }
+Collection<Appeals>& VetClinic::getAppeals() { return appeals; }
+
+const Collection<std::shared_ptr<Animal>>& VetClinic::getAnimal() const { return animal; }
+const Collection<Vet>& VetClinic::getVet() const { return vet; }
+const Collection<Appeals>& VetClinic::getAppeals() const { return appeals; }
 
 bool VetClinic::appointmentCheck(std::string_view vetSpeciality, const Animal& patient) const
 {
@@ -22,6 +30,7 @@ bool VetClinic::removeAnimal(std::string_view name, std::string_view owner)
     if (!removed)
         throw NotFoundException("Animal '" + std::string(name) + "', owner '" + std::string(owner) + "': not found!");
 
+    logEvent("INFO: Animal removed: " + std::string(name) + " - " + std::string(owner));
     return removed;
 }
 
@@ -35,6 +44,7 @@ void VetClinic::setAnimal(std::shared_ptr<Animal> animalTemp)
 
     animal.add(animalTemp);
     std::sort(animal.begin(), animal.end(), [](const std::shared_ptr<Animal>& a, const std::shared_ptr<Animal>& b) { return *a < *b; });
+    logEvent("INFO: Animal added: " + animalTemp->getType() + ": " + animalTemp->getName() + " - " + animalTemp->getOwner());
 }
 
 void VetClinic::setVet(const Vet& vetTemp)
@@ -43,41 +53,63 @@ void VetClinic::setVet(const Vet& vetTemp)
         throw DuplicateException("Vet '" + std::string(vetTemp.getName()) + "' already exists");
 
     vet.add(vetTemp);
+    logEvent("INFO: Vet added: " + vetTemp.getSpeciality() + ": " + vetTemp.getName());
 }
 
-bool VetClinic::setAppeals(std::string_view vetSpeciality, std::string_view nameAnimal, std::string_view date, const std::string_view diagnosis, std::string_view treatment)
+bool VetClinic::setAppeals(std::string_view vetName, std::string_view animalName, std::string_view animalOwner, std::string_view date, std::string_view diagnosis, std::string_view treatment)
 {
     const Vet* addsDoc = nullptr;
     for (const auto& currentVet : vet)
     {
-        if (currentVet.getSpeciality() == vetSpeciality)
+        if (currentVet.getName() == vetName)
         {
             addsDoc = &currentVet;
             break;
         }
     }
-        
+
     if (!addsDoc)
-        throw NotFoundException("Vet not found");
+        throw NotFoundException("Vet '" + std::string(vetName) + "' not found");
 
     std::shared_ptr<Animal> addsAnimal;
-    for (const auto& currentAnimal : animal) 
+    for (const auto& currentAnimal : animal)
     {
-        if (currentAnimal->getName() == nameAnimal) {
+        if (currentAnimal->getName() == animalName && currentAnimal->getOwner() == animalOwner)
+        {
             addsAnimal = currentAnimal;
             break;
         }
     }
 
-    if (!addsAnimal) 
-        throw NotFoundException("Animal not found");
+    if (!addsAnimal)
+        throw NotFoundException("Animal '" + std::string(animalName) + "', owner '" + std::string(animalOwner) + "' not found");
 
-    if (!appointmentCheck(vetSpeciality, *addsAnimal))
-        throw IncompatibleVetException("A " + std::string(vetSpeciality) + " cannot treat a " + addsAnimal->getType());
+    if (!appointmentCheck(addsDoc->getSpeciality(), *addsAnimal))
+        throw IncompatibleVetException("A " + addsDoc->getSpeciality() + " cannot treat a " + addsAnimal->getType());
 
     appeals.add(Appeals(*addsDoc, addsAnimal, date, diagnosis, treatment));
-    
+
+    logEvent("INFO: Appeals added: " + std::string(vetName) + " - " + std::string(animalName) + " : " + std::string(animalOwner));
     return true;
+}
+
+void VetClinic::setLogger(Logger& loggerTemp)
+{
+    logger = &loggerTemp;
+}
+
+void VetClinic::logEvent(const std::string& message) const
+{
+    if (!logger) return;
+
+    try
+    {
+        logger->log(message);
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "Log error: " << e.what() << std::endl;   // журнал не должен ронять программу
+    }
 }
 
 void VetClinic::infoAnimal() const
@@ -88,6 +120,7 @@ void VetClinic::infoAnimal() const
         std::cout << *animal[i];
         std::cout << "=============================\n" << std::endl;
     }
+    logEvent("INFO: Information about the 'Animal' has been displayed");
 }
 
 void VetClinic::infoVet() const 
@@ -98,6 +131,7 @@ void VetClinic::infoVet() const
         std::cout << vet[i];
         std::cout << "==========================\n" << std::endl;
     }
+    logEvent("INFO: Information about the 'Vet' has been displayed");
 }
 
 void VetClinic::infoAppeals() const 
@@ -108,12 +142,14 @@ void VetClinic::infoAppeals() const
         std::cout << appeals[i];
         std::cout << "==============================\n" << std::endl;
     }
+    logEvent("INFO: Information about the 'Appeals' has been displayed");
 }
 
 VetClinic& VetClinic::operator+=(std::shared_ptr<Animal> ani)
 {
     setAnimal(std::move(ani));
 
+    logEvent("INFO: Animal added: " + ani->getType() + ": " + ani->getName() + " - " + ani->getOwner());
     return *this;
 }
 
@@ -121,6 +157,7 @@ VetClinic& VetClinic::operator+=(const Vet& v)
 {
     setVet(v);
 
+    logEvent("INFO: Vet added: " + v.getSpeciality() + ": " + v.getName());
     return *this;
 }
 
@@ -129,13 +166,18 @@ VetClinic& VetClinic::operator-=(const Animal& ani)
     if (!animal.removeIf([&ani](const std::shared_ptr<Animal>& current) { return *current == ani; }))
         throw NotFoundException("Animal not found!");
     
+    logEvent("INFO: Animal removed: " + std::string(ani.getName()) + " - " + std::string(ani.getOwner()));
     return *this;
 }
 
 VetClinic& VetClinic::operator-=(const Vet& v)
 {
+    std::string name(v.getName());
+    std::string speciality(v.getSpeciality());
+
     if (!vet.removeIf([&v](const Vet& current) { return current == v; }))
         throw NotFoundException("Vet '" + v.getName() + "' not found!");
 
+    logEvent("INFO: Vet removed: " + speciality + ": " + name);
     return *this;
 }

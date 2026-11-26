@@ -75,10 +75,12 @@ void addVeterinarian(VetClinic& clinic)
     catch (const InvalidDataException& e)
     {
         std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
+        clinic.logEvent("ERROR: Invalid data: " + std::string(e.what()));
     }
     catch (const DuplicateException& e)
     {
         std::cout << "\n!!!Duplicate exception: " << e.what() << std::endl;
+        clinic.logEvent("ERROR: Duplicate exception: " + std::string(e.what()));
     }
 
     std::cout << std::endl;
@@ -127,14 +129,17 @@ void addAnimal(VetClinic& clinic)
     catch (const InputFormatException& e)
     {
         std::cout << "\n!!!Input format: " << e.what() << std::endl;
+        clinic.logEvent("ERROR: Input format: " + std::string(e.what()));
     }
     catch (const InvalidDataException& e)
     {
         std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
+        clinic.logEvent("ERROR: Invalid data: " + std::string(e.what()));
     }
     catch (const DuplicateException& e)
     {
-        std::cout << "\n!!!Duplicate: " << e.what() << std::endl;
+        std::cout << "\n!!!Duplicate exception: " << e.what() << std::endl;
+        clinic.logEvent("ERROR: Duplicate exception: " + std::string(e.what()));
     }
 
     std::cout << std::endl;
@@ -142,16 +147,19 @@ void addAnimal(VetClinic& clinic)
 
 void scheduleAppointment(VetClinic& clinic)
 {
-    std::string vetSpeciality;
+    std::string vetName;
     std::string nameAnimal;
+    std::string ownerAnimal;
     std::string date;
     std::string diagnosis;
     std::string treatment;
 
-    std::cout << "Enter the vet's specialization: ";
-    std::getline(std::cin, vetSpeciality);
+    std::cout << "Enter the vet's name: ";
+    std::getline(std::cin, vetName);
     std::cout << "Enter the animal's name: ";
     std::getline(std::cin, nameAnimal);
+    std::cout << "Enter the animal's owner: ";
+    std::getline(std::cin, ownerAnimal);
     std::cout << "Enter the date: ";
     std::getline(std::cin, date);
     std::cout << "Enter the diagnosis: ";
@@ -161,20 +169,23 @@ void scheduleAppointment(VetClinic& clinic)
 
     try
     {
-        clinic.setAppeals(vetSpeciality, nameAnimal, date, diagnosis, treatment);
+        clinic.setAppeals(vetName, nameAnimal, ownerAnimal, date, diagnosis, treatment);
         std::cout << "\nAppeals added successfully" << std::endl;
     }
     catch (const NotFoundException& e)
     {
         std::cout << "\n!!!Not found: " << e.what() << std::endl;
+        clinic.logEvent("ERROR: Not found: " + std::string(e.what()));
     }
     catch (const IncompatibleVetException& e)
     {
         std::cout << "\n!!!Incompatible vet: " << e.what() << std::endl;
+        clinic.logEvent("ERROR: Incompatible vet: " + std::string(e.what()));
     }
     catch (const InvalidDataException& e)
     {
         std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
+        clinic.logEvent("ERROR: Invalid data: " + std::string(e.what()));
     }
 
     std::cout << std::endl;
@@ -194,6 +205,7 @@ void removeVeterinarian(VetClinic& clinic)
     catch (const NotFoundException& e)
     {
         std::cout << "\n!!!Not found: " << e.what() << std::endl;
+        clinic.logEvent("ERROR: Not found: " + std::string(e.what()));
     }
 
     std::cout << std::endl;
@@ -218,6 +230,7 @@ void removeAnimal(VetClinic& clinic)
     catch (const NotFoundException& e)
     {
         std::cout << "\n!!!Not found: " << e.what() << std::endl;
+        clinic.logEvent("ERROR: Not found: " + std::string(e.what()));
     }
 
     std::cout << std::endl;

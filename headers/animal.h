@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <string_view>
 #include <memory>
@@ -60,12 +61,7 @@ public:
         return is;
     }
 
-    friend std::ostream& operator<< (std::ostream& os, const std::shared_ptr<Animal>& ani)
-    {
-        ani->print(os);
-
-        return os;
-    }
+    virtual void save(std::ostream& os) const;
 
     bool operator== (const Animal& ani) const;
 

@@ -40,3 +40,14 @@ std::shared_ptr<Animal> Appeals::getAnimal() const { return animal; }
 std::string Appeals::getDate() const { return date; }
 std::string Appeals::getDiagnosis() const { return diagnosis; }
 std::string Appeals::getTreatment() const { return treatment; }
+
+void Appeals::save(std::ostream& os) const
+{
+    os << "APPEALS#";
+    os << vet.getName() << "#";
+    os << animal->getName() << "#";
+    os << animal->getOwner() << "#";
+    os << date << "#";
+    os << diagnosis << "#";
+    os << treatment;
+}

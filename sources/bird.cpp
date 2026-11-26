@@ -71,3 +71,10 @@ std::string Bird::inputHint() const
 {
     return Animal::inputHint() + " / wingspan in cm";
 }
+
+void Bird::save(std::ostream& os) const 
+{
+    os << "BIRD" << "#";
+    Animal::save(os);
+    os << wingspan;
+}
