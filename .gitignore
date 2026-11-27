@@ -35,6 +35,8 @@
 *.lib
 
 # Executables
+*.zip
+*.rar
 *.txt
 *.sln
 *.slnx

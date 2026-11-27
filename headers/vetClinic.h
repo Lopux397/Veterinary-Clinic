@@ -12,6 +12,9 @@
 #include <string>
 #include <vector>
 
+class Report;
+class ClinicStorage;
+
 class VetClinic
 {
 private:
@@ -19,8 +22,10 @@ private:
     Collection<Vet> vet;
     Collection<Appeals> appeals;
     Logger* logger = nullptr;
+    Report* report = nullptr;
+    ClinicStorage* storage = nullptr;
 public:
-    VetClinic(Logger* loggerTemp);
+    explicit VetClinic(Logger* loggerTemp, Report* reportTemp, ClinicStorage* storageTemp);
 
     VetClinic(const VetClinic&) = delete;
     VetClinic& operator=(const VetClinic&) = delete;
@@ -37,8 +42,13 @@ public:
     void setVet(const Vet& vetTemp);
     bool setAppeals(std::string_view vetName, std::string_view animalName, std::string_view animalOwner, std::string_view date, std::string_view diagnosis, std::string_view treatment);
     void setLogger(Logger& loggerTemp);
+    void setReport(Report& reportTemp);
+    void setStorage(ClinicStorage& storageTemp);
 
     void logEvent(const std::string& message) const;
+    void repEvent() const;
+    void load();
+    void save() const;
 
     bool appointmentCheck(std::string_view vetSpeciality, const Animal& patient) const;
 

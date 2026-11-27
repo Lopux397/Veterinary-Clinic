@@ -3,8 +3,15 @@
 #include "../exception/invalidDataException.h"
 #include "../exception/incompatibleVetException.h"
 #include "../exception/duplicateException.h"
+#include "../exception/fileException.h"
+#include "../headers/report.h"
+#include "../headers/clinicStorage.h"
+#include "../exception/inputFormatException.h"
 
-VetClinic::VetClinic(Logger* loggerTemp) : logger(loggerTemp) {}
+#include <ranges>
+
+VetClinic::VetClinic(Logger* loggerTemp, Report* reportTemp, ClinicStorage* storageTemp)
+    : logger(loggerTemp), report(reportTemp),storage(storageTemp){}
 
 Collection<std::shared_ptr<Animal>>& VetClinic::getAnimal()  { return animal; }
 Collection<Vet>& VetClinic::getVet() { return vet; }
@@ -43,7 +50,8 @@ void VetClinic::setAnimal(std::shared_ptr<Animal> animalTemp)
         throw DuplicateException("Animal '" + std::string(animalTemp->getName()) + "' of owner '" + std::string(animalTemp->getOwner()) + "' already exists");
 
     animal.add(animalTemp);
-    std::sort(animal.begin(), animal.end(), [](const std::shared_ptr<Animal>& a, const std::shared_ptr<Animal>& b) { return *a < *b; });
+
+    std::ranges::sort(animal, [](const std::shared_ptr<Animal>& a, const std::shared_ptr<Animal>& b) { return *a < *b; });
     logEvent("INFO: Animal added: " + animalTemp->getType() + ": " + animalTemp->getName() + " - " + animalTemp->getOwner());
 }
 
@@ -98,6 +106,16 @@ void VetClinic::setLogger(Logger& loggerTemp)
     logger = &loggerTemp;
 }
 
+void VetClinic::setReport(Report& reportTemp)
+{
+    report = &reportTemp;
+}
+
+void VetClinic::setStorage(ClinicStorage& storageTemp) 
+{
+    storage = &storageTemp;
+}
+
 void VetClinic::logEvent(const std::string& message) const
 {
     if (!logger) return;
@@ -106,9 +124,81 @@ void VetClinic::logEvent(const std::string& message) const
     {
         logger->log(message);
     }
-    catch (const std::exception& e)
+    catch (const FileException& e)
     {
-        std::cerr << "Log error: " << e.what() << std::endl;   // журнал не должен ронять программу
+        std::cerr << "\nLog error: " << e.what() << std::endl;
+    }
+}
+
+void VetClinic::repEvent() const 
+{
+    if (!report) return;
+
+    try 
+    {
+        report->create(*this);
+    }
+    catch (const FileException& e)
+    {
+        std::cerr <<"\nFile error: " << e.what() << std::endl;
+        logEvent("ERROR: File error: " + std::string(e.what()));
+
+    }
+}
+
+void VetClinic::load()
+{
+    if (!storage) return;
+
+    try
+    {
+        storage->load(*this);
+    }
+    catch (const FileException& e)
+    {
+        std::cerr << "\nFile error: " << e.what() << std::endl;
+        logEvent("ERROR: File error: " + std::string(e.what()));
+    }
+    catch (const InputFormatException& e)
+    {
+        std::cerr << "\n!!!Input format: " << e.what() << std::endl;
+        logEvent("ERROR: Input format: " + std::string(e.what()));
+    }
+    catch (const DuplicateException& e)
+    {
+        std::cerr << "\n!!!Duplicate exception: " << e.what() << std::endl;
+        logEvent("ERROR: Duplicate exception: " + std::string(e.what()));
+    }
+    catch (const InvalidDataException& e)
+    {
+        std::cerr << "\n!!!Invalid data: " << e.what() << std::endl;
+        logEvent("ERROR: Invalid data: " + std::string(e.what()));
+    }
+    catch (const NotFoundException& e)
+    {
+        std::cerr << "\n!!!Not found: " << e.what() << std::endl;
+        logEvent("ERROR: Not found: " + std::string(e.what()));
+    }
+    catch (const IncompatibleVetException& e)
+    {
+        std::cerr << "\n!!!Incompatible vet: " << e.what() << std::endl;
+        logEvent("ERROR: Incompatible vet: " + std::string(e.what()));
+    }
+}
+
+void VetClinic::save() const
+{
+    if (!storage) return;
+
+    try
+    {
+        storage->save(*this);
+    }
+    catch (const FileException& e)
+    {
+        std::cerr << "\nFile error: " << e.what() << std::endl;
+        logEvent("ERROR: File error: " + std::string(e.what()));
+
     }
 }
 
@@ -147,9 +237,13 @@ void VetClinic::infoAppeals() const
 
 VetClinic& VetClinic::operator+=(std::shared_ptr<Animal> ani)
 {
+    std::string type(ani->getType());
+    std::string name(ani->getName());
+    std::string owner(ani->getOwner());
+
     setAnimal(std::move(ani));
 
-    logEvent("INFO: Animal added: " + ani->getType() + ": " + ani->getName() + " - " + ani->getOwner());
+    logEvent("INFO: Animal added: " + type + ": " + name + " - " + owner);
     return *this;
 }
 

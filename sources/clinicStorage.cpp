@@ -7,6 +7,7 @@
 #include "../headers/rodent.h"
 
 #include <fstream>
+#include <format>
 #include <sstream>
 #include <memory>
 #include <vector>
@@ -49,7 +50,7 @@ void ClinicStorage::save(const VetClinic& clinic) const
 	clinic.logEvent("INFO: State saved to '" + filePath + "'");
 }
 
-void ClinicStorage::load(VetClinic& clinic) 
+void ClinicStorage::load(VetClinic& clinic)
 {
 	std::ifstream in(filePath, std::ios::in);
 
@@ -76,50 +77,38 @@ void ClinicStorage::load(VetClinic& clinic)
 
 		if (type == "VET") 
 		{
-			if (fields.size() != 2)
-				throw InputFormatException("Line " + std::to_string(lineNumber) + ": VET needs 2 fields");
-
+			checkFields(fields, 2, lineNumber, type);
 			clinic.setVet(Vet(fields[0], fields[1]));
 
 		}
 		else if (type == "BIRD") 
 		{
-			if (fields.size() != 5)
-				throw InputFormatException("Line " + std::to_string(lineNumber) + ": BIRD needs 5 fields");
-
+			checkFields(fields, 5, lineNumber, type);
 			clinic.setAnimal(std::make_shared<Bird>(fields[0], fields[1], std::stoul(fields[2]), fields[3], std::stoul(fields[4])));
 		}
 		else if (type == "CAT")
 		{
-			if (fields.size() != 5)
-				throw InputFormatException("Line " + std::to_string(lineNumber) + ": CAT needs 5 fields");
-
+			checkFields(fields, 5, lineNumber, type);
 			clinic.setAnimal(std::make_shared<Cat>(fields[0], fields[1], std::stoul(fields[2]), fields[3], std::stoul(fields[4])));
 		}
 		else if (type == "DOG")
 		{
-			if (fields.size() != 5)
-				throw InputFormatException("Line " + std::to_string(lineNumber) + ": DOG needs 5 fields");
-
+			checkFields(fields, 5, lineNumber, type);
 			clinic.setAnimal(std::make_shared<Dog>(fields[0], fields[1], std::stoul(fields[2]), fields[3], std::stoul(fields[4])));
 		}
 		else if (type == "RODENT")
 		{
-			if (fields.size() != 5)
-				throw InputFormatException("Line " + std::to_string(lineNumber) + ": RODENT needs 5 fields");
-
+			checkFields(fields, 5, lineNumber, type);
 			clinic.setAnimal(std::make_shared<Rodent>(fields[0], fields[1], std::stoul(fields[2]), fields[3], std::stod(fields[4])));
 		}
 		else if (type == "APPEALS")
 		{
-			if (fields.size() != 6)
-				throw InputFormatException("Line " + std::to_string(lineNumber) + ": APPEALS needs 6 fields");
-
+			checkFields(fields, 6, lineNumber, type);
 			clinic.setAppeals(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5]);
 		}
 		else
 		{
-			throw InputFormatException("Line " + std::to_string(lineNumber) + ": unknown record type '" + type + "'");
+			throw InputFormatException(std::format("Line {}: unknown record type '{}'", lineNumber, type));
 		}
 	}
 
@@ -130,3 +119,8 @@ void ClinicStorage::load(VetClinic& clinic)
 	clinic.logEvent("INFO: State loaded from '" + filePath + "'");
 }
 
+void ClinicStorage::checkFields(const std::vector<std::string>& fields, size_t expected, int lineNumber, std::string_view type)
+{
+	if (fields.size() != expected)
+		throw InputFormatException(std::format("Line {}: {} needs {} fields", lineNumber, type, expected));
+}

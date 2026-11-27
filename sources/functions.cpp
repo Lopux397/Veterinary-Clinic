@@ -19,6 +19,9 @@
 #include <memory>
 #include <string>
 
+#define MIN_MENU_OPTION int(0)
+#define MAX_MENU_OPTION int(9)
+
 void clearInput()
 {
     std::cin.clear();
@@ -36,6 +39,7 @@ void printMenu()
     std::cout << "6. Show appointment history" << std::endl;
     std::cout << "7. Remove veterinarian" << std::endl;
     std::cout << "8. Remove the animal" << std::endl;
+    std::cout << "9. Create a report" << std::endl;
     std::cout << "0. Exit" << std::endl;
     std::cout << "=====================================" << std::endl;
 }
@@ -53,7 +57,7 @@ int readMenuOption()
     }
 
     clearInput();
-    if (option < 0 || option > 8)
+    if (option < MIN_MENU_OPTION || option > MAX_MENU_OPTION)
     {
         throw InputFormatException("The menu items cannot be negative or more menu items");
     }
@@ -74,12 +78,12 @@ void addVeterinarian(VetClinic& clinic)
     }
     catch (const InvalidDataException& e)
     {
-        std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
+        std::cerr << "\n!!!Invalid data: " << e.what() << std::endl;
         clinic.logEvent("ERROR: Invalid data: " + std::string(e.what()));
     }
     catch (const DuplicateException& e)
     {
-        std::cout << "\n!!!Duplicate exception: " << e.what() << std::endl;
+        std::cerr << "\n!!!Duplicate exception: " << e.what() << std::endl;
         clinic.logEvent("ERROR: Duplicate exception: " + std::string(e.what()));
     }
 
@@ -128,17 +132,17 @@ void addAnimal(VetClinic& clinic)
     }
     catch (const InputFormatException& e)
     {
-        std::cout << "\n!!!Input format: " << e.what() << std::endl;
+        std::cerr << "\n!!!Input format: " << e.what() << std::endl;
         clinic.logEvent("ERROR: Input format: " + std::string(e.what()));
     }
     catch (const InvalidDataException& e)
     {
-        std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
+        std::cerr << "\n!!!Invalid data: " << e.what() << std::endl;
         clinic.logEvent("ERROR: Invalid data: " + std::string(e.what()));
     }
     catch (const DuplicateException& e)
     {
-        std::cout << "\n!!!Duplicate exception: " << e.what() << std::endl;
+        std::cerr << "\n!!!Duplicate exception: " << e.what() << std::endl;
         clinic.logEvent("ERROR: Duplicate exception: " + std::string(e.what()));
     }
 
@@ -174,17 +178,17 @@ void scheduleAppointment(VetClinic& clinic)
     }
     catch (const NotFoundException& e)
     {
-        std::cout << "\n!!!Not found: " << e.what() << std::endl;
+        std::cerr << "\n!!!Not found: " << e.what() << std::endl;
         clinic.logEvent("ERROR: Not found: " + std::string(e.what()));
     }
     catch (const IncompatibleVetException& e)
     {
-        std::cout << "\n!!!Incompatible vet: " << e.what() << std::endl;
+        std::cerr << "\n!!!Incompatible vet: " << e.what() << std::endl;
         clinic.logEvent("ERROR: Incompatible vet: " + std::string(e.what()));
     }
     catch (const InvalidDataException& e)
     {
-        std::cout << "\n!!!Invalid data: " << e.what() << std::endl;
+        std::cerr << "\n!!!Invalid data: " << e.what() << std::endl;
         clinic.logEvent("ERROR: Invalid data: " + std::string(e.what()));
     }
 
@@ -204,7 +208,7 @@ void removeVeterinarian(VetClinic& clinic)
     }
     catch (const NotFoundException& e)
     {
-        std::cout << "\n!!!Not found: " << e.what() << std::endl;
+        std::cerr << "\n!!!Not found: " << e.what() << std::endl;
         clinic.logEvent("ERROR: Not found: " + std::string(e.what()));
     }
 
@@ -229,11 +233,18 @@ void removeAnimal(VetClinic& clinic)
     }
     catch (const NotFoundException& e)
     {
-        std::cout << "\n!!!Not found: " << e.what() << std::endl;
+        std::cerr << "\n!!!Not found: " << e.what() << std::endl;
         clinic.logEvent("ERROR: Not found: " + std::string(e.what()));
     }
 
     std::cout << std::endl;
+}
+
+void createReport(VetClinic& clinic)
+{
+    clinic.repEvent();
+
+    std::cout << "\nReport successfully created\n" << std::endl;
 }
 
 void menu(VetClinic& clinic, bool& end)
@@ -268,6 +279,9 @@ void menu(VetClinic& clinic, bool& end)
         break;
     case 8:
         removeAnimal(clinic);
+        break;
+    case 9:
+        createReport(clinic);
         break;
     case 0:
         end = true;

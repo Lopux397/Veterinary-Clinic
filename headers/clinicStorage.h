@@ -9,6 +9,7 @@ class ClinicStorage
 {
 private:
 	std::string filePath;
+	void checkFields(const std::vector<std::string>& fields, size_t expected, int lineNumber, std::string_view type);
 public:
 	explicit ClinicStorage(std::string_view filePathTemp);
 
