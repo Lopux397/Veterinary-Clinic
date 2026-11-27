@@ -50,7 +50,7 @@ void ClinicStorage::save(const VetClinic& clinic) const
 	clinic.logEvent("INFO: State saved to '" + filePath + "'");
 }
 
-void ClinicStorage::load(VetClinic& clinic)
+void ClinicStorage::load(VetClinic& clinic) const
 {
 	std::ifstream in(filePath, std::ios::in);
 
@@ -119,7 +119,7 @@ void ClinicStorage::load(VetClinic& clinic)
 	clinic.logEvent("INFO: State loaded from '" + filePath + "'");
 }
 
-void ClinicStorage::checkFields(const std::vector<std::string>& fields, size_t expected, int lineNumber, std::string_view type)
+void ClinicStorage::checkFields(const std::vector<std::string>& fields, size_t expected, int lineNumber, std::string_view type) const
 {
 	if (fields.size() != expected)
 		throw InputFormatException(std::format("Line {}: {} needs {} fields", lineNumber, type, expected));

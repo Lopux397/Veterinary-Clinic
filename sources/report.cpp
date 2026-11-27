@@ -2,9 +2,10 @@
 #include "../exception/fileException.h"
 
 #include <fstream>
-#include <iomanip>
 #include <map>
 #include <string>
+#include <functional>
+#include <format>
 
 Report::Report(std::string_view filePathTemp) : filePath(filePathTemp)
 {
@@ -41,21 +42,18 @@ void Report::create(const VetClinic& clinic) const
 
 	number = 1;
 	double totalPrice = 0;
-	std::map<std::string, int> countByType;
+	std::map<std::string, int, std::less<>> countByType;
 
 	for (const auto& a : clinic.getAnimal())
 	{
-		out << number++ << ". "
-			<< std::left << std::setw(8) << a->getType()
-			<< std::setw(14) << a->getName()
-			<< std::setw(20) << a->getBreed()
-			<< "age " << std::setw(3) << a->getAge()
-			<< "owner: " << std::setw(12) << a->getOwner()
-			<< "checkup: " << std::fixed << std::setprecision(2) << a->checkupPrice() << '\n';
+		out << std::format("{}. {:<8}{:<14}{:<20}age {:<3}owner: {:<12}checkup: {:.2f}\n",
+			number++, a->getType(), a->getName(), a->getBreed(),
+			a->getAge(), a->getOwner(), a->checkupPrice());
 
 		totalPrice += a->checkupPrice();
 		++countByType[a->getType()];
 	}
+
 	out << '\n';
 
 	// 3. Обращения
@@ -90,7 +88,7 @@ void Report::create(const VetClinic& clinic) const
 		out << "  " << type << ": " << count << '\n';
 
 	out << "Appeals:       " << clinic.getAppeals().size() << '\n';
-	out << "Total checkup price of all animals: " << std::fixed << std::setprecision(2) << totalPrice << '\n';
+	out << std::format("Total checkup price of all animals: {:.2f}\n", totalPrice);
 
 	if (!out)
 		throw FileException("The file at the path '" + filePath + "' could not record");

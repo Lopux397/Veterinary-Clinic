@@ -240,7 +240,7 @@ void removeAnimal(VetClinic& clinic)
     std::cout << std::endl;
 }
 
-void createReport(VetClinic& clinic)
+void createReport(const VetClinic& clinic)
 {
     clinic.repEvent();
 

@@ -16,4 +16,4 @@ void addAnimal(VetClinic& clinic);
 void scheduleAppointment(VetClinic& clinic);
 void removeVeterinarian(VetClinic& clinic);
 void removeAnimal(VetClinic& clinic);
-void createReport(VetClinic& clinic);
+void createReport(const VetClinic& clinic);
