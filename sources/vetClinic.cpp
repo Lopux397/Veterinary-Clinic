@@ -124,7 +124,7 @@ void VetClinic::logEvent(const std::string& message) const
     {
         logger->log(message);
     }
-    catch (const std::runtime_error& e)   // FileException, std::format_error, time zone errors
+    catch (const FileException& e)
     {
         std::cerr << "\nLog error: " << e.what() << std::endl;
     }
@@ -143,11 +143,6 @@ bool VetClinic::repEvent() const
     {
         std::cerr << "\nFile error: " << e.what() << std::endl;
         logEvent("ERROR: File error: " + std::string(e.what()));
-    }
-    catch (const std::runtime_error& e)   // e.g. std::format_error while building the report
-    {
-        std::cerr << "\n!!!Report error: " << e.what() << std::endl;
-        logEvent("ERROR: Report error: " + std::string(e.what()));
     }
 
     return false;
