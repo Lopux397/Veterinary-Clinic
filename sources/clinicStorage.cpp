@@ -91,6 +91,7 @@ void ClinicStorage::load(VetClinic& clinic) const
 		}
 		catch (const std::exception& e)
 		{
+			// any other problem (duplicate, invalid value, missing vet/animal, ...) gets its line number
 			throw InputFormatException(std::format("Line {}: {}", lineNumber, e.what()));
 		}
 	}

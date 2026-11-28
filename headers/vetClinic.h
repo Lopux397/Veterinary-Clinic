@@ -24,6 +24,9 @@ private:
     Logger* logger = nullptr;
     Report* report = nullptr;
     ClinicStorage* storage = nullptr;
+
+    void removeAppealsOfAnimal(std::string_view name, std::string_view owner);
+    void removeAppealsOfVet(std::string_view name);
 public:
     explicit VetClinic(Logger* loggerTemp, Report* reportTemp, ClinicStorage* storageTemp);
 

@@ -53,7 +53,7 @@ int readMenuOption()
     if (std::cin.fail())
     {
         if (std::cin.eof())
-            return MIN_MENU_OPTION;
+            return MIN_MENU_OPTION;     // input stream ended (Ctrl+Z / Ctrl+D): behave like "Exit"
 
         clearInput();
         throw InputFormatException("Menu items must be a number");

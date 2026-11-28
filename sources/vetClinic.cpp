@@ -8,6 +8,7 @@
 #include "../headers/clinicStorage.h"
 #include "../exception/inputFormatException.h"
 
+#include <format>
 #include <ranges>
 
 VetClinic::VetClinic(Logger* loggerTemp, Report* reportTemp, ClinicStorage* storageTemp)
@@ -26,6 +27,34 @@ bool VetClinic::appointmentCheck(std::string_view vetSpeciality, const Animal& p
     return patient.canBeTreatedBy(vetSpeciality);
 }
 
+void VetClinic::removeAppealsOfAnimal(std::string_view name, std::string_view owner)
+{
+    std::size_t removed = 0;
+
+    while (appeals.removeIf([&name, &owner](const Appeals& current)
+        {
+            const auto currentAnimal = current.getAnimal();
+            return currentAnimal && currentAnimal->getName() == name && currentAnimal->getOwner() == owner;
+        }))
+    {
+        ++removed;
+    }
+
+    if (removed > 0)
+        logEvent(std::format("INFO: {} appeal(s) removed together with the animal {} - {}", removed, name, owner));
+}
+
+void VetClinic::removeAppealsOfVet(std::string_view name)
+{
+    std::size_t removed = 0;
+
+    while (appeals.removeIf([&name](const Appeals& current) { return current.getVet().getName() == name; }))
+        ++removed;
+
+    if (removed > 0)
+        logEvent(std::format("INFO: {} appeal(s) removed together with the vet {}", removed, name));
+}
+
 bool VetClinic::removeAnimal(std::string_view name, std::string_view owner)
 {
     bool removed = animal.removeIf(
@@ -38,6 +67,7 @@ bool VetClinic::removeAnimal(std::string_view name, std::string_view owner)
         throw NotFoundException("Animal '" + std::string(name) + "', owner '" + std::string(owner) + "': not found!");
 
     logEvent("INFO: Animal removed: " + std::string(name) + " - " + std::string(owner));
+    removeAppealsOfAnimal(name, owner);
     return removed;
 }
 
@@ -188,6 +218,7 @@ bool VetClinic::load()
         logEvent("ERROR: Incompatible vet: " + std::string(e.what()));
     }
 
+    // loading failed: drop the half-loaded data so the program does not work with a partial state
     animal.clear();
     vet.clear();
     appeals.clear();
@@ -262,6 +293,7 @@ VetClinic& VetClinic::operator-=(const Animal& ani)
         throw NotFoundException("Animal not found!");
     
     logEvent("INFO: Animal removed: " + std::string(ani.getName()) + " - " + std::string(ani.getOwner()));
+    removeAppealsOfAnimal(ani.getName(), ani.getOwner());
     return *this;
 }
 
@@ -274,5 +306,6 @@ VetClinic& VetClinic::operator-=(const Vet& v)
         throw NotFoundException("Vet '" + v.getName() + "' not found!");
 
     logEvent("INFO: Vet removed: " + speciality + ": " + name);
+    removeAppealsOfVet(name);
     return *this;
 }
