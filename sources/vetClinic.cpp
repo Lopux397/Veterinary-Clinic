@@ -124,7 +124,7 @@ void VetClinic::logEvent(const std::string& message) const
     {
         logger->log(message);
     }
-    catch (const std::exception& e)
+    catch (const std::runtime_error& e)   // FileException, std::format_error, time zone errors
     {
         std::cerr << "\nLog error: " << e.what() << std::endl;
     }
@@ -144,10 +144,10 @@ bool VetClinic::repEvent() const
         std::cerr << "\nFile error: " << e.what() << std::endl;
         logEvent("ERROR: File error: " + std::string(e.what()));
     }
-    catch (const std::exception& e)
+    catch (const std::runtime_error& e)   // e.g. std::format_error while building the report
     {
-        std::cerr << "\n!!!Unexpected error: " << e.what() << std::endl;
-        logEvent("ERROR: Unexpected error: " + std::string(e.what()));
+        std::cerr << "\n!!!Report error: " << e.what() << std::endl;
+        logEvent("ERROR: Report error: " + std::string(e.what()));
     }
 
     return false;
@@ -192,13 +192,7 @@ bool VetClinic::load()
         std::cerr << "\n!!!Incompatible vet: " << e.what() << std::endl;
         logEvent("ERROR: Incompatible vet: " + std::string(e.what()));
     }
-    catch (const std::exception& e)
-    {
-        std::cerr << "\n!!!Unexpected error: " << e.what() << std::endl;
-        logEvent("ERROR: Unexpected error: " + std::string(e.what()));
-    }
 
-    // loading failed: drop the half-loaded data so the program does not work with a partial state
     animal.clear();
     vet.clear();
     appeals.clear();
@@ -217,11 +211,6 @@ void VetClinic::save() const
     {
         std::cerr << "\nFile error: " << e.what() << std::endl;
         logEvent("ERROR: File error: " + std::string(e.what()));
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << "\n!!!Unexpected error: " << e.what() << std::endl;
-        logEvent("ERROR: Unexpected error: " + std::string(e.what()));
     }
 }
 

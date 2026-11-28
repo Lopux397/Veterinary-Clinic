@@ -57,9 +57,9 @@ void ClinicStorage::save(const VetClinic& clinic) const
 
 void ClinicStorage::load(VetClinic& clinic) const
 {
-	std::error_code ec;
-	if (!std::filesystem::exists(filePath, ec))
+	if (std::error_code ec; !std::filesystem::exists(filePath, ec))
 	{
+		// first run: there is no saved state yet, this is not an error
 		clinic.logEvent("INFO: No saved state found at '" + filePath + "', starting empty");
 		return;
 	}
