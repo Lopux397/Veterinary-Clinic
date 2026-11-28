@@ -124,35 +124,43 @@ void VetClinic::logEvent(const std::string& message) const
     {
         logger->log(message);
     }
-    catch (const FileException& e)
+    catch (const std::exception& e)
     {
         std::cerr << "\nLog error: " << e.what() << std::endl;
     }
 }
 
-void VetClinic::repEvent() const 
+bool VetClinic::repEvent() const 
 {
-    if (!report) return;
+    if (!report) return false;
 
     try 
     {
         report->create(*this);
+        return true;
     }
     catch (const FileException& e)
     {
-        std::cerr <<"\nFile error: " << e.what() << std::endl;
+        std::cerr << "\nFile error: " << e.what() << std::endl;
         logEvent("ERROR: File error: " + std::string(e.what()));
-
     }
+    catch (const std::exception& e)
+    {
+        std::cerr << "\n!!!Unexpected error: " << e.what() << std::endl;
+        logEvent("ERROR: Unexpected error: " + std::string(e.what()));
+    }
+
+    return false;
 }
 
-void VetClinic::load()
+bool VetClinic::load()
 {
-    if (!storage) return;
+    if (!storage) return true;
 
     try
     {
         storage->load(*this);
+        return true;
     }
     catch (const FileException& e)
     {
@@ -184,6 +192,17 @@ void VetClinic::load()
         std::cerr << "\n!!!Incompatible vet: " << e.what() << std::endl;
         logEvent("ERROR: Incompatible vet: " + std::string(e.what()));
     }
+    catch (const std::exception& e)
+    {
+        std::cerr << "\n!!!Unexpected error: " << e.what() << std::endl;
+        logEvent("ERROR: Unexpected error: " + std::string(e.what()));
+    }
+
+    // loading failed: drop the half-loaded data so the program does not work with a partial state
+    animal.clear();
+    vet.clear();
+    appeals.clear();
+    return false;
 }
 
 void VetClinic::save() const
@@ -198,7 +217,11 @@ void VetClinic::save() const
     {
         std::cerr << "\nFile error: " << e.what() << std::endl;
         logEvent("ERROR: File error: " + std::string(e.what()));
-
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "\n!!!Unexpected error: " << e.what() << std::endl;
+        logEvent("ERROR: Unexpected error: " + std::string(e.what()));
     }
 }
 
@@ -237,13 +260,8 @@ void VetClinic::infoAppeals() const
 
 VetClinic& VetClinic::operator+=(std::shared_ptr<Animal> ani)
 {
-    std::string type(ani->getType());
-    std::string name(ani->getName());
-    std::string owner(ani->getOwner());
-
     setAnimal(std::move(ani));
 
-    logEvent("INFO: Animal added: " + type + ": " + name + " - " + owner);
     return *this;
 }
 
@@ -251,7 +269,6 @@ VetClinic& VetClinic::operator+=(const Vet& v)
 {
     setVet(v);
 
-    logEvent("INFO: Vet added: " + v.getSpeciality() + ": " + v.getName());
     return *this;
 }
 

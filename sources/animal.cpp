@@ -1,16 +1,22 @@
 ﻿#include "../headers/animal.h"
 #include "../exception/invalidDataException.h"
 #include "../exception/inputFormatException.h"
+#include "../headers/validation.h"
 
 Animal::Animal(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp)
-    : name(nameTemp), breed(breedTemp), age(ageTemp), owner(ownerTemp)
-{}
+{
+    setName(nameTemp);
+    setBreed(breedTemp);
+    setAge(ageTemp);
+    setOwner(ownerTemp);
+}
 
 void Animal::setName(std::string_view nameTemp)
 {
     if (nameTemp.empty())
         throw InvalidDataException("The name cannot be empty");
 
+    checkNoSeparator(nameTemp, "name");
     name = nameTemp;
 }
 void Animal::setBreed(std::string_view breedTemp)
@@ -18,6 +24,7 @@ void Animal::setBreed(std::string_view breedTemp)
     if (breedTemp.empty())
         throw InvalidDataException("The breed cannot be empty");
 
+    checkNoSeparator(breedTemp, "breed");
     breed = breedTemp;
 }
 void Animal::setAge(unsigned int ageTemp)
@@ -32,6 +39,7 @@ void Animal::setOwner(std::string_view ownerTemp)
     if (ownerTemp.empty())
         throw InvalidDataException("The owner cannot be empty");
 
+    checkNoSeparator(ownerTemp, "owner");
     owner = ownerTemp;
 }
 

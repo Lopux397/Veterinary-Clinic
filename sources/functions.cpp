@@ -52,6 +52,9 @@ int readMenuOption()
 
     if (std::cin.fail())
     {
+        if (std::cin.eof())
+            return MIN_MENU_OPTION;
+
         clearInput();
         throw InputFormatException("Menu items must be a number");
     }
@@ -242,9 +245,10 @@ void removeAnimal(VetClinic& clinic)
 
 void createReport(const VetClinic& clinic)
 {
-    clinic.repEvent();
-
-    std::cout << "\nReport successfully created\n" << std::endl;
+    if (clinic.repEvent())
+        std::cout << "\nReport successfully created\n" << std::endl;
+    else
+        std::cout << "\nReport was not created\n" << std::endl;
 }
 
 void menu(VetClinic& clinic, bool& end)

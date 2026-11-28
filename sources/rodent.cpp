@@ -4,8 +4,10 @@
 
 Rodent::Rodent() : Animal() {}
 Rodent::Rodent(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, double incisorLengthTemp)
-    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp), incisorLength(incisorLengthTemp) 
-{}
+    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp)
+{
+    setIncisorLength(incisorLengthTemp);
+}
 
 void Rodent::setIncisorLength(double incisorLengthTemp)
 { 

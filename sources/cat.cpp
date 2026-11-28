@@ -4,8 +4,10 @@
 
 Cat::Cat() : Animal() {}
 Cat::Cat(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int hairballsPerMonthTemp)
-    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp), hairballsPerMonth(hairballsPerMonthTemp)
-{}
+    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp)
+{
+    setHairballsPerMonth(hairballsPerMonthTemp);
+}
 
 void Cat::setHairballsPerMonth(unsigned int hairballsPerMonthTemp)
 {

@@ -4,8 +4,10 @@
 
 Bird::Bird() : Animal() {}
 Bird::Bird(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int wingspanTemp)
-    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp), wingspan(wingspanTemp) 
-{}
+    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp)
+{
+    setWingspan(wingspanTemp);
+}
 
 void Bird::setWingspan(unsigned int wingspanTemp) 
 {

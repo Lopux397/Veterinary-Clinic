@@ -4,8 +4,10 @@
 
 Dog::Dog() : Animal() {}
 Dog::Dog(std::string_view nameTemp, std::string_view breedTemp, unsigned int ageTemp, std::string_view ownerTemp, unsigned int walksPerDayTemp)
-    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp), walksPerDay(walksPerDayTemp) 
-{}
+    : Animal(nameTemp, breedTemp, ageTemp, ownerTemp)
+{
+    setWalksPerDay(walksPerDayTemp);
+}
 
 void Dog::setWalksPerDay(unsigned int walksPerDayTemp)
 { 

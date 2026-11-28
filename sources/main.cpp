@@ -36,7 +36,7 @@ int main()
 
     clinic.logEvent("INFO: Program started");
 
-    clinic.load();
+    bool loaded = clinic.load();
 
     while (!end)
     {
@@ -47,11 +47,22 @@ int main()
         catch (const InputFormatException& e)
         {
             std::cerr << "\n!!!Input format: " << e.what() << '\n' << std::endl;
-            logger.log("ERROR: Input format: " + std::string(e.what()));
+            clinic.logEvent("ERROR: Input format: " + std::string(e.what()));
+        }
+        catch (const std::exception& e)
+        {
+            std::cerr << "\n!!!Unexpected error: " << e.what() << '\n' << std::endl;
+            clinic.logEvent("ERROR: Unexpected error: " + std::string(e.what()));
         }
     }
 
-    clinic.save();
+    if (loaded)
+        clinic.save();
+    else
+    {
+        std::cerr << "\nThe state was not saved to protect the damaged save file." << std::endl;
+        clinic.logEvent("WARNING: State was not saved because loading failed");
+    }
 
     clinic.logEvent("INFO: Program finished");
     return 0;

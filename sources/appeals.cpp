@@ -1,10 +1,16 @@
 ﻿#include "../headers/appeals.h"
 #include "../exception/invalidDataException.h"
+#include "../headers/validation.h"
 
 Appeals::Appeals() = default;
 Appeals::Appeals(const Vet& vetTemp, std::shared_ptr<Animal> animalTemp, std::string_view dateTemp, std::string_view diagnosisTemp, std::string_view treatmentTemp)
-    : vet(vetTemp), animal(std::move(animalTemp)), date(dateTemp), diagnosis(diagnosisTemp), treatment(treatmentTemp)
-{}
+{
+    setVet(vetTemp);
+    setAnimal(animalTemp);
+    setDate(dateTemp);
+    setDiagnosis(diagnosisTemp);
+    setTreatment(treatmentTemp);
+}
 
 void Appeals::setVet(const Vet& vetTemp) { vet = vetTemp; }
 void Appeals::setAnimal(std::shared_ptr<Animal> animalTemp)
@@ -18,13 +24,15 @@ void Appeals::setDate(std::string_view dateTemp)
     if (dateTemp.empty())
         throw InvalidDataException("The date cannot be empty");
 
-    date = dateTemp; 
+    checkNoSeparator(dateTemp, "date");
+    date = dateTemp;
 }
 void Appeals::setDiagnosis(std::string_view diagnosisTemp)
 { 
     if (diagnosisTemp.empty())
         throw InvalidDataException("The diagnosis cannot be empty");
 
+    checkNoSeparator(diagnosisTemp, "diagnosis");
     diagnosis = diagnosisTemp;
 }
 void Appeals::setTreatment(std::string_view treatmentTemp)
@@ -32,6 +40,7 @@ void Appeals::setTreatment(std::string_view treatmentTemp)
     if (treatmentTemp.empty())
         throw InvalidDataException("The treatment cannot be empty");
 
+    checkNoSeparator(treatmentTemp, "treatment");
     treatment = treatmentTemp;
 }
 

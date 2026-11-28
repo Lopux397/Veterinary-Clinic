@@ -46,8 +46,8 @@ public:
     void setStorage(ClinicStorage& storageTemp);
 
     void logEvent(const std::string& message) const;
-    void repEvent() const;
-    void load();
+    bool repEvent() const;
+    bool load();
     void save() const;
 
     bool appointmentCheck(std::string_view vetSpeciality, const Animal& patient) const;
